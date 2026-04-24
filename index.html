@@ -318,7 +318,7 @@
         <nav class="hidden md:flex items-center gap-7 text-[13px] text-ink-mid">
           <a href="#what" class="hover:text-ink transition" data-i18n="nav.what">What it does</a>
           <a href="#compose" class="hover:text-ink transition" data-i18n="nav.compose">Compose</a>
-          <a href="#pricing" class="hover:text-ink transition" data-i18n="nav.pricing">Pricing</a>
+          <a href="#pricing" class="hover:text-ink transition" data-i18n="nav.pricing">Waitlist</a>
           <a href="#faq" class="hover:text-ink transition" data-i18n="nav.faq">FAQ</a>
         </nav>
         <div class="flex items-center gap-3">
@@ -328,7 +328,7 @@
             <button type="button" class="lang-btn" data-lang="ru" aria-pressed="false">RU</button>
           </div>
           <a href="#pricing" class="btn-ink-sm">
-            <span data-i18n="nav.cta">Get Pree</span>
+            <span data-i18n="nav.cta">Join waitlist</span>
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
           </a>
         </div>
@@ -363,16 +363,16 @@
 
           <div class="mt-9 flex flex-wrap items-center gap-3">
             <a href="#pricing" class="btn-ink">
-              <span data-i18n="hero.ctaTry">Try it free</span>
+              <span data-i18n="hero.ctaTry">Join the waitlist</span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </a>
             <a href="#pricing" class="btn-paper">
-              <span data-i18n="hero.ctaOnce">One-time</span>
-              <span class="font-medium">$19</span>
+              <span data-i18n="hero.ctaOnce">First 100</span>
+              <span class="font-medium">$9.99</span>
             </a>
           </div>
           <p class="mt-4 text-[12.5px] text-ink-lo" data-i18n="hero.fine">
-            No signup · No card · macOS 13+ · Apple Silicon &amp; Intel
+            Lifetime price · No subscription · macOS 13+ · Apple Silicon &amp; Intel
           </p>
         </div>
 
@@ -420,7 +420,7 @@
             </h2>
           </div>
           <div class="what-intro-cta">
-            <a href="#pricing" class="btn-ink-sm" data-i18n="what.seePricing">See pricing</a>
+            <a href="#pricing" class="btn-ink-sm" data-i18n="what.seePricing">Join waitlist</a>
           </div>
         </div>
 
@@ -1165,8 +1165,63 @@
       </div>
     </section>
 
-    <!-- ─────────────────  PRICING · two cards, Memorisely  ───────────────── -->
+    <!-- ─────────────────  WAITLIST · temporary replacement for pricing  ─────────────────
+         Shown while we wire up payments. The original two-card PRICING section is kept
+         below, commented out, and will come back once Paddle/Stripe is connected. -->
     <section id="pricing" class="py-24 md:py-32 bg-paper2 border-y border-ink/10">
+      <div class="mx-auto max-w-3xl px-6 text-center">
+        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-lo" data-i18n="waitlist.eyebrow">§ early access</p>
+
+        <h2 class="mt-3 font-serif text-[40px] md:text-[56px] leading-[1.02] tracking-[-0.02em]" data-i18n-html="waitlist.title">
+          Join the <em class="serif-ital">waitlist.</em>
+        </h2>
+
+        <p class="mt-5 text-[15.5px] md:text-[17px] text-ink-mid leading-[1.6]" data-i18n-html="waitlist.body">
+          Pree is polishing the last rough edges before launch. The first
+          <strong class="text-ink">100&nbsp;people</strong> on the list lock in
+          <strong class="text-ink">$9.99&nbsp;forever</strong> — one payment, no subscription, yours for good.
+        </p>
+
+        <!-- Waitlist card -->
+        <div class="waitlist-card mt-12 mx-auto">
+          <div class="waitlist-card-head">
+            <span class="ftag ftag-coral" data-i18n="waitlist.tag">First 100</span>
+            <span class="font-mono text-[11px] text-ink-lo" data-i18n="waitlist.sub">$9.99 · forever · one-time</span>
+          </div>
+
+          <form class="waitlist-form mt-7" novalidate>
+            <label for="wl-email" class="sr-only" data-i18n="waitlist.label">Your email</label>
+            <div class="wl-input-wrap">
+              <input
+                id="wl-email"
+                name="email"
+                type="email"
+                required
+                autocomplete="email"
+                placeholder="you@email.com"
+                class="wl-input"
+                data-i18n-placeholder="waitlist.placeholder"
+              />
+              <button type="submit" class="btn-ink wl-btn">
+                <span data-i18n="waitlist.cta">Join waitlist</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </button>
+            </div>
+            <p class="wl-note mt-4 font-mono text-[11px] text-ink-lo" data-i18n="waitlist.note">No spam. One email when access opens.</p>
+            <p class="wl-thanks mt-4 font-mono text-[12px] text-forest" data-i18n="waitlist.thanks" hidden>You're in. We'll email you the second the doors open.</p>
+          </form>
+        </div>
+
+        <p class="mt-10 text-[11.5px] text-ink-lo font-mono" data-i18n="pricing.footer">
+          macOS 13 Ventura or newer · Apple Silicon &amp; Intel
+        </p>
+      </div>
+    </section>
+
+    <!-- ─────────────────  PRICING · two cards, Memorisely · PARKED ─────────────────
+         Temporarily hidden while the waitlist is live. Restore this block and remove the
+         waitlist section above once payments are connected.
+    <section id="pricing-parked" class="py-24 md:py-32 bg-paper2 border-y border-ink/10">
       <div class="mx-auto max-w-5xl px-6">
         <div class="text-center max-w-2xl mx-auto">
           <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-lo" data-i18n="pricing.eyebrow">§ what it costs</p>
@@ -1181,7 +1236,6 @@
         </div>
 
         <div class="mt-14 grid md:grid-cols-2 gap-5 max-w-4xl mx-auto">
-          <!-- Try card (soft) -->
           <div class="plan plan-soft">
             <div class="plan-head">
               <span class="ftag ftag-sage" data-i18n="pricing.try.tag">Try</span>
@@ -1205,7 +1259,6 @@
             </a>
           </div>
 
-          <!-- Own card (ink) -->
           <div class="plan plan-ink">
             <div class="plan-head">
               <span class="ftag ftag-coral" data-i18n="pricing.own.tag">Own it</span>
@@ -1236,6 +1289,7 @@
         </p>
       </div>
     </section>
+    -->
 
     <!-- ─────────────────  FOUNDER NOTE · Yukee centered serenity  ───────────────── -->
     <section class="py-24 md:py-32">
@@ -1314,7 +1368,7 @@
         <div class="mt-8 flex items-center justify-center gap-5 text-[12px] font-mono text-ink-lo">
           <a href="#faq" class="hover:text-ink transition" data-i18n="footer.faq">faq</a>
           <span class="text-ink-faint">·</span>
-          <a href="#pricing" class="hover:text-ink transition" data-i18n="footer.pricing">pricing</a>
+          <a href="#pricing" class="hover:text-ink transition" data-i18n="footer.pricing">waitlist</a>
           <span class="text-ink-faint">·</span>
           <a href="mailto:hey@pulsebar.app" class="hover:text-ink transition" data-i18n="footer.contact">contact</a>
           <span class="text-ink-faint">·</span>

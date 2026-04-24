@@ -274,6 +274,11 @@ kbd {
   align-items: center;
   justify-content: center;
   min-height: 190px;
+  width: 100%;
+  min-width: 0;
+}
+.what-panel-demo > * {
+  max-width: 100%;
 }
 .what-panel-demo-wide {
   min-height: 220px;
@@ -581,6 +586,11 @@ kbd {
   align-items: center;
   justify-content: center;
   min-height: 150px;
+  width: 100%;
+  min-width: 0;
+}
+.what-mini-demo > * {
+  max-width: 100%;
 }
 
 /* ─────────────────── Feature cards (3 big) ─────────────────── */
@@ -663,6 +673,7 @@ kbd {
   align-items: flex-start;
 }
 .alert-figma-card {
+  width: 100%;
   max-width: 328px;
   background: #F1E7DB;
   border-radius: 16px;
@@ -2052,16 +2063,102 @@ button.mdv-row:hover {
   }
   .what-panel-top,
   .what-panel-bottom {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 24px 16px 26px;
+  }
+  .what-mini {
+    padding: 22px 16px 24px;
   }
   .what-panel h3,
   .what-panel-top h3 {
     max-width: none;
+    width: auto;
   }
   .what-panel-demo,
   .what-panel-demo-wide {
     min-height: 0;
+  }
+  .what-mini-demo {
+    min-height: 0;
+  }
+  /* Let every demo card fill its panel on narrow screens */
+  .what-board .fv-alert,
+  .what-board .fv-detail,
+  .what-board .fv-today,
+  .what-board .fv-meeting-card,
+  .what-panel-demo .alert-figma-card,
+  .what-panel-demo .mdv-card,
+  .what-mini-demo .mcf-card,
+  .what-mini-demo .fv-today {
+    max-width: 100%;
+    width: 100%;
+  }
+  /* Tighter internals inside the mini Today list so the live Join pill can breathe */
+  .fv-today,
+  .mcf-card,
+  .mdv-card,
+  .alert-figma-card {
+    padding: 14px;
+  }
+  .fv-today-row,
+  .fv-today-item {
+    padding: 6px 8px;
+    gap: 8px;
+  }
+  .fv-today-time {
+    width: 42px;
+  }
+  /* Meeting card: keep right-side actions from pushing off screen */
+  .mcf-top {
+    gap: 8px;
+  }
+  .mcf-top-actions {
+    gap: 3px;
+    flex-shrink: 0;
+  }
+  .mcf-pill,
+  .mcf-icon-btn {
+    height: 26px;
+  }
+  .mcf-icon-btn {
+    width: 26px;
+  }
+  .mcf-pill {
+    padding: 0 7px;
+    font-size: 11.5px;
+  }
+  .mcf-actions {
+    gap: 3px;
+  }
+  .mcf-footer {
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  /* Materials card: compact badges so NOTION/LINEAR labels stop clipping */
+  .mdv-row {
+    gap: 10px;
+    padding: 8px 8px;
+  }
+  .mdv-badge {
+    min-width: 48px;
+    padding: 0 6px;
+    font-size: 8.5px;
+    letter-spacing: 0.4px;
+  }
+  .mdv-row-action {
+    padding: 0 8px;
+    font-size: 9.5px;
+  }
+  /* Pre-call alert: the video preview shouldn't dominate a narrow column */
+  .alert-figma-preview {
+    height: 260px;
+  }
+  .alert-figma-footer {
+    gap: 10px;
+  }
+  .alert-figma-join {
+    padding: 0 10px;
+    height: 26px;
+    font-size: 11.5px;
   }
   .qbar-scene {
     max-width: 100%;
@@ -2122,6 +2219,49 @@ button.mdv-row:hover {
     font-size: 10px;
   }
   .stat-n { font-size: 40px; }
+}
+
+/* Tablet range: panels become 2-up but each column is still narrow (~320-380px content),
+   so cards need to yield their desktop max-widths. */
+@media (min-width: 641px) and (max-width: 900px) {
+  .what-panel-top,
+  .what-panel-bottom {
+    padding: 26px 18px 28px;
+  }
+  .what-mini {
+    padding: 22px 18px 24px;
+  }
+  .what-board .fv-alert,
+  .what-board .fv-detail,
+  .what-board .fv-today,
+  .what-board .fv-meeting-card,
+  .what-panel-demo .alert-figma-card,
+  .what-panel-demo .mdv-card,
+  .what-mini-demo .mcf-card,
+  .what-mini-demo .fv-today {
+    max-width: 100%;
+    width: 100%;
+  }
+  .fv-today,
+  .mcf-card,
+  .mdv-card,
+  .alert-figma-card {
+    padding: 14px;
+  }
+  .mcf-top-actions,
+  .mcf-actions {
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .mdv-row {
+    gap: 10px;
+  }
+  .mdv-badge {
+    min-width: 50px;
+    padding: 0 6px;
+    font-size: 8.5px;
+    letter-spacing: 0.5px;
+  }
 }
 
 /* ─────────────────── Founder note ─────────────────── */
@@ -2244,6 +2384,80 @@ button.mdv-row:hover {
   flex-shrink: 0;
 }
 .li-tick-light span:first-child { color: #E85C4A; }
+
+/* ─────────────────── Waitlist card (temporary replacement for pricing) ─────────────────── */
+.waitlist-card {
+  max-width: 560px;
+  padding: 28px 28px 26px;
+  border-radius: 22px;
+  background: #FAF7F0;
+  border: 1px solid rgba(20, 18, 16, 0.1);
+  box-shadow: 0 30px 60px -40px rgba(20, 18, 16, 0.25);
+  text-align: left;
+}
+.waitlist-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.waitlist-form .wl-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 6px 6px 14px;
+  border-radius: 99px;
+  background: #fff;
+  border: 1px solid rgba(20, 18, 16, 0.12);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.waitlist-form .wl-input-wrap:focus-within {
+  border-color: rgba(20, 18, 16, 0.45);
+  box-shadow: 0 0 0 4px rgba(20, 18, 16, 0.05);
+}
+.waitlist-form .wl-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  outline: none;
+  font: inherit;
+  font-size: 14px;
+  color: #141210;
+  padding: 8px 4px;
+}
+.waitlist-form .wl-input::placeholder { color: #9b958a; }
+.waitlist-form .wl-btn {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.waitlist-form .wl-note,
+.waitlist-form .wl-thanks { text-align: center; }
+.waitlist-form .wl-thanks { display: none; }
+.waitlist-form[data-state="submitted"] .wl-input-wrap,
+.waitlist-form[data-state="submitted"] .wl-note { display: none; }
+.waitlist-form[data-state="submitted"] .wl-thanks { display: block; }
+
+@media (max-width: 540px) {
+  .waitlist-card { padding: 22px; border-radius: 18px; }
+  .waitlist-form .wl-input-wrap {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 16px;
+  }
+  .waitlist-form .wl-btn { justify-content: center; }
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
+}
 
 /* ─────────────────── FAQ ─────────────────── */
 .qa { display: grid; gap: 10px; }

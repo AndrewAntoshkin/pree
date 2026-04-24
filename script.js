@@ -32,9 +32,9 @@
     // nav
     "nav.what": "Что делает",
     "nav.compose": "Карточка",
-    "nav.pricing": "Цена",
+    "nav.pricing": "Вейтлист",
     "nav.faq": "Вопросы",
-    "nav.cta": "Скачать Pree",
+    "nav.cta": "В вейтлист",
 
     // hero
     "hero.eyebrow": "Pree · v1.0 · для macOS",
@@ -42,9 +42,16 @@
       "Момент<br/>перед<br/>следующим звонком.",
     "hero.sub":
       "Тихое приложение в меню-баре, которое показывает, что будет дальше, когда входить и сколько у тебя времени, не заставляя открывать календарь.",
-    "hero.ctaTry": "Попробовать бесплатно",
-    "hero.ctaOnce": "Разово",
-    "hero.fine": "Без регистрации · Без карты · macOS 13+ · Apple Silicon и Intel",
+    // NOTE: hero.ctaTry / hero.ctaOnce / hero.fine + nav.pricing / nav.cta are tuned for the
+    // waitlist phase. When payments are wired, restore these originals:
+    //   nav.pricing:  "Цена"
+    //   nav.cta:      "Скачать Pree"
+    //   hero.ctaTry:  "Попробовать бесплатно"
+    //   hero.ctaOnce: "Разово"
+    //   hero.fine:    "Без регистрации · Без карты · macOS 13+ · Apple Silicon и Intel"
+    "hero.ctaTry": "В вейтлист",
+    "hero.ctaOnce": "Первые 100",
+    "hero.fine": "Цена навсегда · Без подписки · macOS 13+ · Apple Silicon и Intel",
     "hero.trustKicker": "§ от автора",
     "hero.trustCopy": "Один человек, одно Mac-приложение — для той тихой минуты перед звонком.",
     "hero.trustShipping": "в активной разработке",
@@ -64,7 +71,7 @@
     "what.eyebrow": "§ что он делает",
     "what.title":
       'Несколько вещей Pree делает особенно хорошо,<br/><em class="serif-ital text-ink-mid">остальные — тихо, на фоне, без лишнего шума.</em>',
-    "what.seePricing": "Смотреть цены",
+    "what.seePricing": "В вейтлист",
 
     // card 1 — alert
     "card.alert.eventTitle": "Дизайн-ревью",
@@ -363,6 +370,20 @@
     "pricing.own.paddle": "одна оплата · персональная лицензия",
     "pricing.footer": "macOS 13 Ventura или новее · Apple Silicon и Intel",
 
+    // waitlist (temporary replacement for the pricing cards)
+    "waitlist.eyebrow": "§ ранний доступ",
+    "waitlist.title":
+      'Пока собираем <em class="serif-ital">вейтлист.</em>',
+    "waitlist.body":
+      'Pree сейчас докручивает последние углы перед запуском. Первые <strong class="text-ink">100 человек</strong> из листа фиксируют <strong class="text-ink">$9,99 навсегда</strong> — одна оплата, без подписки, лицензия ваша.',
+    "waitlist.tag": "Первые 100",
+    "waitlist.sub": "$9,99 · навсегда · одна оплата",
+    "waitlist.label": "Ваша почта",
+    "waitlist.placeholder": "вы@почта.com",
+    "waitlist.cta": "Встать в очередь",
+    "waitlist.note": "Без спама. Одно письмо, когда откроется доступ.",
+    "waitlist.thanks": "Вы в списке. Напишем в ту же секунду, как откроем доступ.",
+
     // founder
     "founder.body":
       'Pree вырос из попытки навести порядок в <em class="serif-ital">моей собственной</em> раздёрганной неделе. Я выпустил его, потому что единственное, что хуже пропущенного созвона, — потом за него извиняться.',
@@ -400,7 +421,7 @@
     "footer.signoff":
       'Сделано с заботой и без спешки,<br/><em class="serif-ital text-ink-mid">для всех, у кого неделя почти целиком состоит из созвонов.</em>',
     "footer.faq": "вопросы",
-    "footer.pricing": "цена",
+    "footer.pricing": "вейтлист",
     "footer.contact": "связаться",
     "footer.privacy": "конфиденциальность",
     "footer.changelog": "обновления",
@@ -1757,12 +1778,18 @@
       { sel: "[data-i18n='words.note']", cls: "reveal-soft" },
       { sel: ".quote", cls: "reveal-zoom", groupStep: 90 },
 
-      // ───── pricing
+      // ───── waitlist (temporary replacement for pricing cards)
+      { sel: "[data-i18n='waitlist.eyebrow']", cls: "reveal-blur" },
+      { sel: "h2[data-i18n-html='waitlist.title']", cls: "rv-split", split: "words" },
+      { sel: "p[data-i18n-html='waitlist.body']", cls: "reveal-soft" },
+      { sel: ".waitlist-card", cls: "reveal-zoom" },
+      { sel: "[data-i18n='pricing.footer']", cls: "reveal-soft" },
+
+      // ───── pricing (kept for when payments are wired; selectors harmless if unmounted)
       { sel: "[data-i18n='pricing.eyebrow']", cls: "reveal-blur" },
       { sel: "h2[data-i18n-html='pricing.title']", cls: "rv-split", split: "words" },
       { sel: "p[data-i18n='pricing.body']", cls: "reveal-soft" },
       { sel: ".plan", cls: "reveal-zoom", groupStep: 130 },
-      { sel: "[data-i18n='pricing.footer']", cls: "reveal-soft" },
 
       // ───── founder note
       { sel: ".founder-avatar-wrap", cls: "reveal-zoom" },
@@ -1994,6 +2021,35 @@
     window.addEventListener("resize", onScroll, { passive: true });
   }
 
+  // ───────────────────────────────────────────────
+  // Waitlist form — client-side only for now. Persists any entered email
+  // to localStorage and flips the form into a "thanks" state. When the
+  // real backend is ready this can POST to /waitlist instead.
+  // ───────────────────────────────────────────────
+  function mountWaitlist() {
+    const form = document.querySelector(".waitlist-form");
+    if (!form) return;
+    const thanks = form.querySelector(".wl-thanks");
+    if (thanks) thanks.hidden = false;
+    form.dataset.state = "idle";
+
+    if (localStorage.getItem("pree.waitlist.joined") === "1") {
+      form.dataset.state = "submitted";
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const input = form.querySelector('input[type="email"]');
+      if (!input || !input.checkValidity()) {
+        input && input.focus();
+        return;
+      }
+      try { localStorage.setItem("pree.waitlist.email", input.value.trim()); } catch (_) {}
+      try { localStorage.setItem("pree.waitlist.joined", "1"); } catch (_) {}
+      form.dataset.state = "submitted";
+    });
+  }
+
   ready(() => {
     // Language switcher goes first so everything mounts with the chosen
     // locale (stored in localStorage from last session).
@@ -2006,6 +2062,7 @@
     mountMonthPeek();
     mountWorldClock();
     mountHeroMacBar();
+    mountWaitlist();
     // Reveals last — after i18n has applied, so data-i18n-html headings
     // have their final markup and our word-splitter operates on the
     // real text.
