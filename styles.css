@@ -4584,6 +4584,10 @@ button.mdv-row:hover {
 /* ═══════════════════════════════════════════════════════════════
    Language switcher · sits in the header, reads like metadata
    ═══════════════════════════════════════════════════════════════ */
+
+/* TEMP: language toggle hidden — remove this rule to restore EN/RU picker. */
+.lang-switch { display: none !important; }
+
 .lang-switch {
   display: inline-flex;
   align-items: center;
