@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Pree">
+  <rect width="512" height="512" rx="114" ry="114" fill="#2F2B26"/>
+  <path fill="none" stroke="#F1E7DB" stroke-width="52" stroke-linecap="round"
+    d="M113.676 114.014C94.673 160.39 85.0175 253.68 198.419 255.829C302.5 257.801 391 102.196 334.777 102.196C250.9 102.195 116.972 318.154 212.5 366.5C308.028 414.846 458 282 402 255.829C336.5 225.219 262.5 391.5 383.5 414"/>
+</svg>

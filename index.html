@@ -1,0 +1,1331 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title data-i18n="meta.title">Pree — The moment before your next call</title>
+    <meta
+      name="description"
+      data-i18n-meta="meta.description"
+      content="Pree is a quiet menu bar app that shows what's next, when to join, and how much time you have — without opening your calendar."
+    />
+    <meta name="theme-color" content="#F5EFE6" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400;1,9..144,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Playfair+Display:ital,wght@1,500;1,600;1,700&display=swap"
+    />
+
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              paper: "#F5EFE6",
+              paper2: "#EFE8DD",
+              cream: "#FAF7F0",
+              ink: {
+                DEFAULT: "#141210",
+                mid: "#5C554B",
+                lo: "#8F887D",
+                faint: "#C9C1B3",
+              },
+              coral: {
+                DEFAULT: "#E85C4A",
+                soft: "#F5C6A0",
+                dim: "#B9422F",
+              },
+              forest: {
+                DEFAULT: "#1F4F3A",
+                soft: "#D7E5DD",
+              },
+            },
+            fontFamily: {
+              sans: ["Geist", "ui-sans-serif", "system-ui", "-apple-system", "sans-serif"],
+              mono: ["Geist Mono", "ui-monospace", "monospace"],
+              serif: ["Fraunces", "ui-serif", "Georgia", "serif"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
+  </head>
+
+  <body class="font-sans antialiased bg-paper text-ink selection:bg-coral/25 selection:text-ink">
+    <!-- ─────────────────  FAUX macOS MENU BAR · live Pulsebar token  ───────────────── -->
+    <!-- Full-bleed strip across the very top. The Pulsebar chip is clickable and drops a
+         dark meeting-card popover. Frames the whole page as "this is a Mac." -->
+    <div class="mac-bar" data-mac-bar>
+      <div class="mac-bar-inner">
+        <div class="mac-bar-left">
+          <svg class="mac-bar-apple" width="12" height="14" viewBox="0 0 17 21" fill="currentColor" aria-hidden="true">
+            <path d="M12.73 11.12c-.02-2.22 1.82-3.29 1.9-3.35-1.04-1.51-2.65-1.72-3.22-1.74-1.37-.14-2.68.81-3.38.81-.7 0-1.78-.79-2.93-.77-1.5.02-2.9.87-3.67 2.22-1.57 2.71-.4 6.73 1.13 8.94.75 1.08 1.64 2.3 2.79 2.26 1.12-.05 1.54-.72 2.9-.72 1.36 0 1.73.72 2.92.7 1.21-.02 1.97-1.1 2.71-2.19.86-1.25 1.21-2.47 1.23-2.54-.03-.01-2.35-.9-2.38-3.62zM10.36 3.72c.62-.75 1.03-1.79.92-2.82-.89.04-1.96.59-2.6 1.34-.57.66-1.07 1.72-.94 2.73.99.08 1.99-.5 2.62-1.25z"/>
+          </svg>
+          <span class="mac-bar-appname">Pree</span>
+          <span class="mac-bar-menu" data-i18n="macbar.file">File</span>
+          <span class="mac-bar-menu" data-i18n="macbar.edit">Edit</span>
+          <span class="mac-bar-menu" data-i18n="macbar.view">View</span>
+          <span class="mac-bar-menu" data-i18n="macbar.window">Window</span>
+          <span class="mac-bar-menu" data-i18n="macbar.help">Help</span>
+        </div>
+
+        <div class="mac-bar-right">
+          <span class="mac-bar-hint" aria-hidden="true">
+            <span data-i18n="macbar.hint">click me</span>
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 6h14"/><path d="m10 1 5 5-5 5"/>
+            </svg>
+          </span>
+
+          <button
+            type="button"
+            class="mac-bar-token"
+            data-hero-token
+            aria-expanded="false"
+            aria-controls="hero-popover"
+          >
+            <span class="mac-bar-token-dot"></span>
+            <span class="mac-bar-token-title">Design review</span>
+            <span class="mac-bar-token-sep">·</span>
+            <span class="mac-bar-token-time" data-hero-countdown>in 4m</span>
+            <svg class="mac-bar-token-chev" width="8" height="5" viewBox="0 0 8 5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m1 1 3 3 3-3"/></svg>
+          </button>
+
+          <span class="mac-bar-sys" aria-hidden="true">
+            <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><path d="M8 10.4 4.2 6.6a5.4 5.4 0 0 1 7.6 0L8 10.4Zm0-6.8a7.5 7.5 0 0 0-5.3 2.2L1.2 4.3a9.6 9.6 0 0 1 13.6 0l-1.5 1.5A7.5 7.5 0 0 0 8 3.6Z"/></svg>
+          </span>
+          <span class="mac-bar-sys" aria-hidden="true">
+            <svg width="22" height="10" viewBox="0 0 22 10" fill="none" stroke="currentColor" stroke-width="1"><rect x="0.5" y="0.5" width="18" height="9" rx="2"/><rect x="2" y="2" width="13" height="6" rx="0.5" fill="currentColor"/><rect x="20" y="3.5" width="1.5" height="3" rx="0.5" fill="currentColor"/></svg>
+          </span>
+          <span class="mac-bar-sys mac-bar-sys-text">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          </span>
+          <span class="mac-bar-clock" data-hero-clock>Thu Apr 23 · 15:55</span>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════════
+           The dropdown meeting-card popover.
+           1:1 port of the real SwiftUI MeetingCard + TodayView +
+           SettingsMenu + MeetingDetailView (paperclip) +
+           CameraCheckView (Join). Every button navigates like the
+           real app does on macOS; 4 screens share the same popover.
+           ═══════════════════════════════════════════════════════════ -->
+      <div id="hero-popover" class="mac-bar-popover" data-hero-popover role="dialog" aria-hidden="true" aria-label="Pree">
+        <div class="mpc" data-mpc data-screen="meeting">
+
+          <!-- ──────── SCREEN 1 · MEETING CARD (default) ──────── -->
+          <section class="mpc-screen" data-mpc-screen="meeting">
+            <!-- Summary strip: greeting + day stats, then today pill, then gear menu -->
+            <div class="mpc-summary">
+              <div class="mpc-sum-text">
+                <div class="mpc-greet" data-mpc-greet>Добрый день, Андрей</div>
+                <div class="mpc-stats" data-mpc-stats>23 апр · 3 встречи · 2 часа фокуса</div>
+              </div>
+              <button type="button" class="mpc-pill" data-mpc-today
+                      data-i18n-en-title="mpc.todayTitle" data-i18n-en-aria="mpc.todayTitle"
+                      data-i18n-en="mpc.today"
+                      title="Все встречи сегодня" aria-label="Все встречи сегодня">Сегодня</button>
+              <div class="mpc-gear-wrap">
+                <button type="button" class="mpc-sq mpc-gear" data-mpc-gear
+                        aria-haspopup="menu" aria-expanded="false"
+                        data-i18n-en-title="mpc.menu" data-i18n-en-aria="mpc.menu"
+                        title="Меню Pree" aria-label="Меню Pree">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/>
+                  </svg>
+                </button>
+                <!-- The native-feeling SettingsMenu dropdown -->
+                <div class="mpc-menu" data-mpc-menu role="menu" aria-hidden="true">
+                  <button class="mpc-mi" role="menuitem" data-mpc-mi-action="prefs"><span class="mpc-mi-ico">☰</span><span class="mpc-mi-lbl" data-i18n-en="menu.prefs">Настройки…</span><kbd class="mpc-mi-kbd">⌘,</kbd></button>
+                  <div class="mpc-menu-sep"></div>
+                  <button class="mpc-mi is-check" role="menuitemcheckbox" aria-checked="true"  data-mpc-mi-toggle="login"><span class="mpc-mi-ico">⏻</span><span class="mpc-mi-lbl" data-i18n-en="menu.login">Запускать при входе</span></button>
+                  <button class="mpc-mi is-check" role="menuitemcheckbox" aria-checked="true"  data-mpc-mi-toggle="float"><span class="mpc-mi-ico">▢</span><span class="mpc-mi-lbl" data-i18n-en="menu.float">Плавающее окно при запуске</span></button>
+                  <button class="mpc-mi is-check" role="menuitemcheckbox" aria-checked="false" data-mpc-mi-toggle="cam"><span class="mpc-mi-ico">◉</span><span class="mpc-mi-lbl" data-i18n-en="menu.cam">Проверять камеру за минуту до начала</span></button>
+                  <div class="mpc-menu-sep"></div>
+                  <button class="mpc-mi" role="menuitem" data-mpc-mi-action="card"><span class="mpc-mi-ico">▦</span><span class="mpc-mi-lbl" data-i18n-en="menu.card">Настроить карточку встречи…</span></button>
+                  <button class="mpc-mi" role="menuitem" data-mpc-mi-action="month"><span class="mpc-mi-ico">▤</span><span class="mpc-mi-lbl" data-i18n-en="menu.month">Месяц одним взглядом</span><kbd class="mpc-mi-kbd">⌘⇧M</kbd></button>
+                  <div class="mpc-menu-sep"></div>
+                  <div class="mpc-menu-head" data-i18n-en="menu.theme">Оформление</div>
+                  <button class="mpc-mi is-radio" role="menuitemradio" aria-checked="false" data-mpc-mi-theme="system"><span class="mpc-mi-ico">◐</span><span class="mpc-mi-lbl" data-i18n-en="menu.theme.auto">Авто (система)</span></button>
+                  <button class="mpc-mi is-radio" role="menuitemradio" aria-checked="true"  data-mpc-mi-theme="dark"><span class="mpc-mi-ico">◑</span><span class="mpc-mi-lbl" data-i18n-en="menu.theme.dark">Тёмная</span></button>
+                  <button class="mpc-mi is-radio" role="menuitemradio" aria-checked="false" data-mpc-mi-theme="light"><span class="mpc-mi-ico">○</span><span class="mpc-mi-lbl" data-i18n-en="menu.theme.light">Светлая</span></button>
+                  <div class="mpc-menu-sep"></div>
+                  <button class="mpc-mi" role="menuitem" data-mpc-mi-action="shortcuts"><span class="mpc-mi-ico">⌘</span><span class="mpc-mi-lbl" data-i18n-en="menu.shortcuts">Горячие клавиши</span></button>
+                  <button class="mpc-mi" role="menuitem" data-mpc-mi-action="quit"><span class="mpc-mi-ico">⏻</span><span class="mpc-mi-lbl" data-i18n-en="menu.quit">Выход из Pree</span><kbd class="mpc-mi-kbd">⌘Q</kbd></button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Eyebrow + title block with status dot + meta row + 3 actions on the right -->
+            <div class="mpc-main">
+              <div class="mpc-eyebrow" data-mpc-eyebrow data-i18n-en="mpc.eyebrow">Следующая встреча</div>
+              <div class="mpc-row">
+                <div class="mpc-title-block">
+                  <div class="mpc-title">
+                    <span class="mpc-dot" aria-hidden="true"></span>
+                    <span class="mpc-title-text">Design review</span>
+                  </div>
+                  <div class="mpc-meta">
+                    <span class="mpc-prov" style="--prov:#00A852;">
+                      <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15 10.5V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-3.5l4 4.5V6l-4 4.5Z"/></svg>
+                      Google&nbsp;Meet
+                    </span>
+                    <span class="mpc-meta-dot"></span>
+                    <span class="mpc-countdown" data-mpc-countdown>через 4&nbsp;мин</span>
+                    <span class="mpc-meta-dot"></span>
+                    <span class="mpc-time">16:10–17:04</span>
+                  </div>
+                </div>
+                <div class="mpc-actions">
+                  <button type="button" class="mpc-sq" data-mpc-calendar
+                          data-i18n-en-title="mpc.openCal" data-i18n-en-aria="mpc.openCal"
+                          title="Открыть в календаре" aria-label="Открыть в календаре">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                  </button>
+                  <button type="button" class="mpc-sq mpc-sq-badge" data-mpc-materials
+                          data-i18n-en-title="mpc.materials" data-i18n-en-aria="mpc.materialsA11y"
+                          title="Материалы (2)" aria-label="Материалы">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.44 11.05 12.25 20.24a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                    <span class="mpc-badge">2</span>
+                  </button>
+                  <button type="button" class="mpc-join" data-mpc-join
+                          data-i18n-en-title="mpc.joinHelp"
+                          title="Проверить камеру и подключиться" aria-label="Подключиться к Design review">Подключиться</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- ──────── SCREEN 2 · TODAY LIST (real TodayView) ──────── -->
+          <section class="mpc-screen" data-mpc-screen="today" hidden>
+            <div class="mpc-subhead">
+              <button type="button" class="mpc-sq" data-mpc-back data-i18n-en-aria="mpc.back" aria-label="Назад">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div class="mpc-sub-title">
+                <div class="mpc-sub-h1" data-i18n-en="mpc.today.h1">Сегодня</div>
+                <div class="mpc-sub-h2" data-i18n-en="mpc.today.h2">23 апр · 3 встречи · 2 часа фокуса</div>
+              </div>
+            </div>
+            <ul class="mpc-today-list">
+              <li class="mpc-today-row is-past" tabindex="0">
+                <div class="mpc-timecol"><div class="mpc-timecol-t">09:30</div><div class="mpc-timecol-d" data-i18n-en="mpc.today.row1.dur">30 мин</div></div>
+                <div class="mpc-today-body"><div class="mpc-today-title" data-i18n-en="mpc.today.row1.title">Утренний стендап</div><div class="mpc-today-meta" data-i18n-en="mpc.today.row1.meta">Закончился</div></div>
+              </li>
+              <li class="mpc-today-row is-live" tabindex="0">
+                <div class="mpc-timecol"><div class="mpc-timecol-t">14:40</div><div class="mpc-timecol-d" data-i18n-en="mpc.today.row2.dur">20 мин</div></div>
+                <div class="mpc-today-body"><div class="mpc-today-title"><span class="mpc-live-dot"></span><span data-i18n-en="mpc.today.row2.title">Синк с Леной</span></div><div class="mpc-today-meta" data-i18n-en="mpc.today.row2.meta">Zoom · идёт сейчас</div></div>
+                <button class="mpc-sq mpc-sq-sm" data-mpc-row-join="Zoom · Синк с Леной" data-mpc-row-join-en="Zoom · Sync with Lena" data-i18n-en-aria="mpc.joinA11yShort" aria-label="Подключиться">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 10.5V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-3.5l4 4.5V6l-4 4.5Z"/></svg>
+                </button>
+              </li>
+              <li class="mpc-today-row is-next" tabindex="0">
+                <div class="mpc-timecol"><div class="mpc-timecol-t">16:10</div><div class="mpc-timecol-d" data-i18n-en="mpc.today.row3.dur">54 мин</div></div>
+                <div class="mpc-today-body"><div class="mpc-today-title"><span class="mpc-dot mpc-dot-inline"></span>Design review</div><div class="mpc-today-meta" data-i18n-en="mpc.today.row3.meta">Google Meet · через 4&nbsp;мин</div></div>
+                <button class="mpc-sq mpc-sq-sm" data-mpc-row-join="Google Meet · Design review" data-mpc-row-join-en="Google Meet · Design review" data-i18n-en-aria="mpc.joinA11yShort" aria-label="Подключиться">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 10.5V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-3.5l4 4.5V6l-4 4.5Z"/></svg>
+                </button>
+              </li>
+              <li class="mpc-today-row" tabindex="0">
+                <div class="mpc-timecol"><div class="mpc-timecol-t">18:30</div><div class="mpc-timecol-d" data-i18n-en="mpc.today.row4.dur">30 мин</div></div>
+                <div class="mpc-today-body"><div class="mpc-today-title" data-i18n-en="mpc.today.row4.title">1:1 с Андреем</div><div class="mpc-today-meta" data-i18n-en="mpc.today.row4.meta">Zoom · через 2&nbsp;ч</div></div>
+                <button class="mpc-sq mpc-sq-sm" data-mpc-row-join="Zoom · 1:1 с Андреем" data-mpc-row-join-en="Zoom · 1:1 with Andrew" data-i18n-en-aria="mpc.joinA11yShort" aria-label="Подключиться">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 10.5V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-3.5l4 4.5V6l-4 4.5Z"/></svg>
+                </button>
+              </li>
+            </ul>
+          </section>
+
+          <!-- ──────── SCREEN 3 · MATERIALS (paperclip → MeetingDetailView) ──────── -->
+          <section class="mpc-screen" data-mpc-screen="materials" hidden>
+            <div class="mpc-subhead">
+              <button type="button" class="mpc-sq" data-mpc-back data-i18n-en-aria="mpc.back" aria-label="Назад">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div class="mpc-sub-title">
+                <div class="mpc-sub-h1">Design review</div>
+                <div class="mpc-sub-h2" data-i18n-en="mpc.mat.h2">Материалы · 2</div>
+              </div>
+            </div>
+            <ul class="mpc-mat-list">
+              <li class="mpc-mat-row" tabindex="0" data-mpc-mat="Figma · Q4 · Design system" data-mpc-mat-en="Figma · Q4 · Design system">
+                <span class="mpc-mat-ico" style="background:linear-gradient(135deg,#F24E1E,#A259FF);">F</span>
+                <div class="mpc-mat-text">
+                  <div class="mpc-mat-title">Q4 · Design system</div>
+                  <div class="mpc-mat-sub">figma.com/file/q4-design-system</div>
+                </div>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="mpc-mat-arrow" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+              </li>
+              <li class="mpc-mat-row" tabindex="0" data-mpc-mat="Docs · Q4 Planning brief" data-mpc-mat-en="Docs · Q4 Planning brief">
+                <span class="mpc-mat-ico" style="background:linear-gradient(135deg,#1A73E8,#4285F4);">D</span>
+                <div class="mpc-mat-text">
+                  <div class="mpc-mat-title">Q4 Planning brief</div>
+                  <div class="mpc-mat-sub">docs.google.com/document/…</div>
+                </div>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="mpc-mat-arrow" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+              </li>
+            </ul>
+            <div class="mpc-mat-foot">
+              <span class="mpc-mat-foot-k" data-i18n-en="mpc.mat.organizer">Организатор</span><span data-i18n-en="mpc.mat.organizerVal">Лена К.</span>
+              <span class="mpc-mat-foot-k" data-i18n-en="mpc.mat.provider">Платформа</span><span>Google&nbsp;Meet</span>
+              <span class="mpc-mat-foot-k">ID&nbsp;встречи</span><span>847&nbsp;291&nbsp;038</span>
+            </div>
+          </section>
+
+          <!-- ──────── SCREEN 4 · CAMERA CHECK (Join → CameraCheckView) ──────── -->
+          <section class="mpc-screen" data-mpc-screen="cam" hidden>
+            <div class="mpc-subhead">
+              <button type="button" class="mpc-sq" data-mpc-back data-i18n-en-aria="mpc.back" aria-label="Назад">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div class="mpc-sub-title">
+                <div class="mpc-sub-h1" data-i18n-en="mpc.cam.h1">Камера и микрофон</div>
+                <div class="mpc-sub-h2" data-mpc-cam-sub data-i18n-en="mpc.cam.h2">Одна проверка — и можно заходить</div>
+              </div>
+            </div>
+            <div class="mpc-cam-stage">
+              <div class="mpc-cam-eye" aria-hidden="true"></div>
+              <div class="mpc-cam-meter" aria-hidden="true"><div class="mpc-cam-meter-bar" data-mpc-cam-bar></div></div>
+              <div class="mpc-cam-readout"><span class="mpc-live-dot"></span>Mic · <span data-mpc-cam-lbl>в&nbsp;норме</span><span class="mpc-cam-db" data-mpc-cam-db>−14&nbsp;dB</span></div>
+            </div>
+            <button type="button" class="mpc-join mpc-join-wide" data-mpc-launch>
+              <span data-mpc-launch-lbl data-i18n-en="mpc.cam.launch">Открыть Google Meet</span>
+              <kbd class="mpc-kbd-inline">⌘⇧J</kbd>
+            </button>
+          </section>
+
+          <!-- Tiny flash toast used by calendar / menu actions -->
+          <div class="mpc-toast" data-mpc-toast hidden>—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─────────────────  TOP BAR  ───────────────── -->
+    <header class="border-b border-ink/10">
+      <div class="mx-auto max-w-6xl px-6 h-14 flex items-center justify-between">
+        <a href="#" class="flex items-center gap-2.5">
+          <img class="brand-mark" src="assets/brand-mark.svg" alt="" width="22" height="22" draggable="false" />
+          <span class="text-[14px] font-medium tracking-tight">Pree</span>
+        </a>
+        <nav class="hidden md:flex items-center gap-7 text-[13px] text-ink-mid">
+          <a href="#what" class="hover:text-ink transition" data-i18n="nav.what">What it does</a>
+          <a href="#compose" class="hover:text-ink transition" data-i18n="nav.compose">Compose</a>
+          <a href="#pricing" class="hover:text-ink transition" data-i18n="nav.pricing">Pricing</a>
+          <a href="#faq" class="hover:text-ink transition" data-i18n="nav.faq">FAQ</a>
+        </nav>
+        <div class="flex items-center gap-3">
+          <div class="lang-switch" role="group" aria-label="Language">
+            <button type="button" class="lang-btn is-active" data-lang="en" aria-pressed="true">EN</button>
+            <span class="lang-dot" aria-hidden="true">·</span>
+            <button type="button" class="lang-btn" data-lang="ru" aria-pressed="false">RU</button>
+          </div>
+          <a href="#pricing" class="btn-ink-sm">
+            <span data-i18n="nav.cta">Get Pree</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- ─────────────────  HERO · editorial, no serif-italic-trick  ───────────────── -->
+    <section class="relative pt-16 md:pt-24 pb-20 overflow-hidden">
+      <!-- Soft accent orb, faint -->
+      <div aria-hidden="true" class="pointer-events-none absolute -top-24 right-[-10%] w-[520px] h-[520px] rounded-full opacity-40 blur-3xl"
+           style="background: radial-gradient(closest-side, #F5C6A0, transparent);"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute top-40 left-[-15%] w-[480px] h-[480px] rounded-full opacity-30 blur-3xl"
+           style="background: radial-gradient(closest-side, #D7E5DD, transparent);"></div>
+
+      <div class="relative mx-auto max-w-6xl px-6 grid md:grid-cols-12 gap-10 items-end">
+        <div class="md:col-span-8">
+          <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-lo">
+            <span class="inline-block h-1.5 w-1.5 rounded-full bg-forest align-middle mr-2"></span>
+            <span data-i18n="hero.eyebrow">Pree · v1.0 · for macOS</span>
+          </p>
+
+          <h1 class="mt-6 font-serif font-light tracking-[-0.02em] text-[52px] sm:text-[72px] md:text-[96px] leading-[0.98]" data-i18n-html="hero.title">
+            The moment<br/>
+            before your<br/>
+            next call.
+          </h1>
+
+          <p class="mt-7 max-w-xl text-[16px] md:text-[17.5px] leading-[1.6] text-ink-mid" data-i18n="hero.sub">
+            A quiet menu bar app that shows what's next, when to join, and how much time you
+            have, without opening your calendar.
+          </p>
+
+          <div class="mt-9 flex flex-wrap items-center gap-3">
+            <a href="#pricing" class="btn-ink">
+              <span data-i18n="hero.ctaTry">Try it free</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+            <a href="#pricing" class="btn-paper">
+              <span data-i18n="hero.ctaOnce">One-time</span>
+              <span class="font-medium">$19</span>
+            </a>
+          </div>
+          <p class="mt-4 text-[12.5px] text-ink-lo" data-i18n="hero.fine">
+            No signup · No card · macOS 13+ · Apple Silicon &amp; Intel
+          </p>
+        </div>
+
+        <!-- Small maker chip, in lieu of invented reviews -->
+        <aside class="md:col-span-4 flex md:justify-end">
+          <div class="trust-card">
+            <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-lo" data-i18n="hero.trustKicker">§ from the maker</p>
+            <p class="mt-4 font-serif text-[20px] leading-[1.35] text-ink" data-i18n="hero.trustCopy">
+              One person, one Mac app — built for the quiet moment right before the call.
+            </p>
+            <div class="mt-5 pt-3 border-t border-ink/10 flex items-center gap-2 text-[11.5px] font-mono text-ink-lo">
+              <span class="h-1.5 w-1.5 rounded-full bg-coral animate-pulse"></span>
+              <span data-i18n="hero.trustShipping">currently in development</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ─────────────────  YUKEE MANIFESTO · breath between hero and product  ───────────────── -->
+    <section class="bg-paper2 border-y border-ink/10">
+      <div class="mx-auto max-w-3xl px-6 py-24 md:py-32">
+        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-lo" data-i18n="manifesto.eyebrow">§ a short belief</p>
+        <div class="mt-10 font-serif text-[30px] md:text-[40px] leading-[1.22] tracking-[-0.015em] space-y-1 text-ink" data-i18n-html="manifesto.body">
+          <p>Pree isn't a calendar.</p>
+          <p class="text-ink-mid">It's a <em class="serif-ital">pre-call layer</em>.</p>
+          <p>A quiet preview of what's next.</p>
+          <p class="text-ink-mid">The countdown before the scramble.</p>
+          <p>The one-glance card before you're <em class="serif-ital">late</em>.</p>
+          <p class="text-ink-mid">Small software, quiet software,</p>
+          <p>in the thinnest part of your screen.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────────  FEATURE CARDS · 3 big, Memorisely-grid  ───────────────── -->
+    <section id="what" class="what-section py-24 md:py-32">
+      <div class="mx-auto max-w-6xl px-6">
+        <div class="what-intro">
+          <div class="what-intro-copy">
+            <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-lo" data-i18n="what.eyebrow">§ what it does</p>
+            <h2 class="mt-3 font-serif text-[40px] md:text-[54px] leading-[1.05] tracking-[-0.02em] max-w-2xl" data-i18n-html="what.title">
+              A few things it does very well,<br/>
+              <em class="serif-ital text-ink-mid">and plenty more behind the scenes.</em>
+            </h2>
+          </div>
+          <div class="what-intro-cta">
+            <a href="#pricing" class="btn-ink-sm" data-i18n="what.seePricing">See pricing</a>
+          </div>
+        </div>
+
+        <div class="what-board">
+          <article class="what-panel what-panel-top" data-demo="qbar">
+            <div class="what-panel-copy">
+              <span class="ftag ftag-forest" data-i18n="card.qbar.tag">Command bar</span>
+              <h3 data-i18n="card.qbar.heading">The exact ⌘K window the app opens from your menu bar.</h3>
+              <p data-i18n-html="card.qbar.body">This is the actual command bar window from the product, with the same layout, meeting actions, and content the app shows when you press <kbd>⌘K</kbd>.</p>
+            </div>
+            <div class="what-panel-demo what-panel-demo-wide">
+              <div class="qbar-scene" aria-label="Command bar window preview">
+                <div class="qbar-scene-backdrop" aria-hidden="true"></div>
+                <div class="qbar-window">
+                  <div class="qbar-window-top">
+                    <span class="qbar-search-icon" aria-hidden="true">
+                      <svg viewBox="0 0 14 14"><path d="M9.8 9.1 12.6 12m-1.5-5.7a4.2 4.2 0 1 1-8.4 0 4.2 4.2 0 0 1 8.4 0Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+                    </span>
+                    <input
+                      class="qbar-window-input"
+                      type="text"
+                      value=""
+                      placeholder="Find a command or meeting..."
+                      aria-label="Find a command or meeting"
+                      autocomplete="off"
+                      spellcheck="false"
+                    />
+                    <button type="button" class="qbar-window-close" data-demo-button aria-label="Close command bar">
+                      <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M4 4l6 6M10 4 4 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                    </button>
+                  </div>
+                  <div class="qbar-window-divider"></div>
+                  <div class="qbar-window-body">
+                    <div class="qbar-group">
+                      <div class="qbar-window-section">NOW</div>
+                      <button type="button" class="qbar-item is-active" data-demo-button data-search="join core components google meet live now">
+                        <span class="qbar-item-icon is-accent" aria-hidden="true">
+                          <svg viewBox="0 0 14 14"><path d="M3 4.1A1.1 1.1 0 0 1 4.1 3h3.7A1.1 1.1 0 0 1 8.9 4.1v.6l2-.9c.54-.25 1.1.14 1.1.74v5c0 .6-.56.99-1.1.74l-2-.9v.6A1.1 1.1 0 0 1 7.8 11H4.1A1.1 1.1 0 0 1 3 9.9V4.1Z" fill="currentColor"/></svg>
+                        </span>
+                        <span class="qbar-item-copy">
+                          <strong>Join "Core / Components"</strong>
+                          <span>Google Meet · live now</span>
+                        </span>
+                        <span class="qbar-item-kbd">⌘⇧J</span>
+                      </button>
+                      <button type="button" class="qbar-item" data-demo-button data-search="check camera microphone preflight preview before joining">
+                        <span class="qbar-item-icon" aria-hidden="true">
+                          <svg viewBox="0 0 14 14"><path d="M2.4 4.3A1.3 1.3 0 0 1 3.7 3h4.1a1.3 1.3 0 0 1 1.3 1.3v.5l1.7-.8c.5-.24 1 .12 1 .67v4.7c0 .55-.5.9-1 .67l-1.7-.8v.5A1.3 1.3 0 0 1 7.8 11H3.7A1.3 1.3 0 0 1 2.4 9.7V4.3Z" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="5.8" cy="7" r="1.4" fill="currentColor"/></svg>
+                        </span>
+                        <span class="qbar-item-copy">
+                          <strong>Check camera and mic</strong>
+                          <span>Preflight before joining</span>
+                        </span>
+                      </button>
+                      <button type="button" class="qbar-item" data-demo-button data-search="today schedule all meetings list 6">
+                        <span class="qbar-item-icon" aria-hidden="true">
+                          <svg viewBox="0 0 14 14"><path d="M3 3.5h8M3 6.2h8M3 8.9h8M3 11.6h8" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                        </span>
+                        <span class="qbar-item-copy">
+                          <strong>Open today's schedule</strong>
+                          <span>6 meetings · 2 joins available</span>
+                        </span>
+                        <span class="qbar-item-kbd">T</span>
+                      </button>
+                    </div>
+
+                    <div class="qbar-group">
+                      <div class="qbar-window-section">ACTIONS</div>
+                      <button type="button" class="qbar-item" data-demo-button data-search="copy meeting link share url">
+                        <span class="qbar-item-icon" aria-hidden="true">
+                          <svg viewBox="0 0 14 14"><path d="M5.2 8.8 8.8 5.2m-5 1.4L2.6 7.8a2.1 2.1 0 0 0 3 3L6.8 9.6m.4-5.2 1.2-1.2a2.1 2.1 0 1 1 3 3L10.2 7.4" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                        </span>
+                        <span class="qbar-item-copy">
+                          <strong>Copy meeting link</strong>
+                          <span>Share the active call URL</span>
+                        </span>
+                      </button>
+                      <button type="button" class="qbar-item" data-demo-button data-search="copy title name event">
+                        <span class="qbar-item-icon" aria-hidden="true">
+                          <svg viewBox="0 0 14 14"><path d="M3 3.5h8M3 6.2h8M3 8.9h8M3 11.6h8" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                        </span>
+                        <span class="qbar-item-copy">
+                          <strong>Copy event title</strong>
+                          <span>Copy "Core / Components"</span>
+                        </span>
+                      </button>
+                      <button type="button" class="qbar-item" data-demo-button data-search="copy time start time">
+                        <span class="qbar-item-icon" aria-hidden="true">
+                          <svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="4.4" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M7 4.4v2.9l1.7 1" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </span>
+                        <span class="qbar-item-copy">
+                          <strong>Copy start time</strong>
+                          <span>11:30 AM · Pacific</span>
+                        </span>
+                      </button>
+                      <button type="button" class="qbar-item" data-demo-button data-search="move 30m reschedule later">
+                        <span class="qbar-item-icon" aria-hidden="true">
+                          <svg viewBox="0 0 14 14"><path d="M3 10.5h6.1m0 0-1.8-1.8m1.8 1.8-1.8 1.8M11 3.5H4.9m0 0L6.7 1.7M4.9 3.5l1.8 1.8" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </span>
+                        <span class="qbar-item-copy">
+                          <strong>Move +30m</strong>
+                          <span>Push the meeting half an hour later</span>
+                        </span>
+                        <span class="qbar-item-kbd">⌘M</span>
+                      </button>
+                      <button type="button" class="qbar-item" data-demo-button data-search="shorten 15m reduce duration">
+                        <span class="qbar-item-icon" aria-hidden="true">
+                          <svg viewBox="0 0 14 14"><path d="M4 7h6M3.2 5.1 1.8 7l1.4 1.9M10.8 5.1 12.2 7l-1.4 1.9" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </span>
+                        <span class="qbar-item-copy">
+                          <strong>Shorten -15m</strong>
+                          <span>Trim the tail of this meeting</span>
+                        </span>
+                        <span class="qbar-item-kbd">⌘-</span>
+                      </button>
+                      <button type="button" class="qbar-item" data-demo-button data-search="open materials notes figma brief docs">
+                        <span class="qbar-item-icon" aria-hidden="true">
+                          <svg viewBox="0 0 14 14"><path d="M3.2 2.8h5.2l2.6 2.6v5.8a.8.8 0 0 1-.8.8H3.2a.8.8 0 0 1-.8-.8V3.6a.8.8 0 0 1 .8-.8Z" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M8.4 2.8v2.1a.5.5 0 0 0 .5.5H11" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M4.5 7h4.8M4.5 9.1h3.6" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                        </span>
+                        <span class="qbar-item-copy">
+                          <strong>Open materials and notes</strong>
+                          <span>Figma brief · launch checklist · notes</span>
+                        </span>
+                      </button>
+                      <button type="button" class="qbar-item" data-demo-button data-search="month peek calendar grid">
+                        <span class="qbar-item-icon" aria-hidden="true">
+                          <svg viewBox="0 0 14 14"><rect x="2.3" y="3" width="9.4" height="8.4" rx="1.1" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M2.8 5.3h8.4M4.6 2v2.1M9.4 2v2.1" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                        </span>
+                        <span class="qbar-item-copy">
+                          <strong>Open month peek</strong>
+                          <span>Calendar grid with event dots</span>
+                        </span>
+                      </button>
+                    </div>
+                    <div class="qbar-empty" hidden>No results for this query.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <div class="what-board-bottom">
+            <article class="what-panel what-panel-bottom" data-demo="alert">
+              <div class="what-panel-copy">
+                <span class="ftag ftag-coral" data-i18n="card.alert.tag">Pre-call nudge</span>
+                <h3 data-i18n="card.alert.heading">A quiet tap on the shoulder, never a wall of notifications.</h3>
+                <p data-i18n-html="card.alert.body">This is the real pre-call window from the app: camera preview on top, countdown in the corner, and the same floating action bar with <kbd>Join</kbd> and <kbd>Skip</kbd>. <span class="text-coral">Tap the buttons to see.</span></p>
+              </div>
+              <div class="what-panel-demo what-panel-demo-alert">
+                <div class="fv-alert alert-figma-card">
+                  <div class="alert-figma-topline">
+                    <span class="alert-figma-dot" aria-hidden="true"></span>
+                    <span class="alert-figma-time">00:13</span>
+                  </div>
+                  <div class="alert-figma-preview" aria-hidden="true">
+                    <div class="alert-figma-preview-inner">
+                      <video
+                        class="alert-figma-video"
+                        src="assets/precall-preview.mp4"
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                        preload="auto"
+                      ></video>
+                    </div>
+                  </div>
+                  <div class="alert-figma-footer">
+                    <div class="alert-figma-copy">
+                      <div class="alert-figma-title">Встреча по ДС</div>
+                      <div class="alert-figma-meta">Zoom ・ Уже идет</div>
+                    </div>
+                    <button class="alert-figma-join" type="button">Join</button>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="what-panel what-panel-bottom" data-demo="materials">
+              <div class="what-panel-copy">
+                <span class="ftag ftag-peach" data-i18n="card.materials.tag">Materials &amp; context</span>
+                <h3 data-i18n="card.materials.heading">The meeting detail view pulls links and people into one place.</h3>
+                <p data-i18n-html="card.materials.body">This one is based on the real detail screen in the popover: header, materials section, participant section, and open actions for each linked doc.</p>
+              </div>
+              <div class="what-panel-demo">
+                <div class="mdv-card">
+                  <div class="mdv-head">
+                    <button type="button" class="mdv-btn mdv-icon-btn" data-demo-button aria-label="Назад">
+                      <svg viewBox="0 0 14 14" aria-hidden="true">
+                        <path d="M8.75 2.2 4.2 6.75l4.55 4.55-.85.85L2.5 6.75 7.9 1.35z"/>
+                      </svg>
+                    </button>
+                    <div class="mdv-head-copy">
+                      <div class="mdv-title">Встреча по ДС</div>
+                      <div class="mdv-subtitle">13:30–14:15</div>
+                    </div>
+                    <button type="button" class="mdv-btn mdv-icon-btn" data-demo-button aria-label="Меню настроек Pree">
+                      <svg viewBox="0 0 14 14" aria-hidden="true">
+                        <path d="M7 1.9a.8.8 0 0 1 .78.62l.18.77a3.9 3.9 0 0 1 .8.33l.7-.39a.8.8 0 0 1 .97.12l.45.45a.8.8 0 0 1 .12.97l-.39.7c.13.26.24.53.33.8l.77.18a.8.8 0 0 1 .62.78v.64a.8.8 0 0 1-.62.78l-.77.18a3.9 3.9 0 0 1-.33.8l.39.7a.8.8 0 0 1-.12.97l-.45.45a.8.8 0 0 1-.97.12l-.7-.39c-.26.13-.53.24-.8.33l-.18.77A.8.8 0 0 1 7 12.1h-.64a.8.8 0 0 1-.78-.62l-.18-.77a3.9 3.9 0 0 1-.8-.33l-.7.39a.8.8 0 0 1-.97-.12l-.45-.45a.8.8 0 0 1-.12-.97l.39-.7a3.9 3.9 0 0 1-.33-.8l-.77-.18A.8.8 0 0 1 1.9 7v-.64a.8.8 0 0 1 .62-.78l.77-.18c.09-.27.2-.54.33-.8l-.39-.7a.8.8 0 0 1 .12-.97l.45-.45a.8.8 0 0 1 .97-.12l.7.39c.26-.13.53-.24.8-.33l.18-.77A.8.8 0 0 1 6.36 1.9H7Zm-.32 3.2a1.9 1.9 0 1 0 0 3.8 1.9 1.9 0 0 0 0-3.8Z"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="mdv-scroll">
+                    <div class="mdv-section">
+                      <div class="mdv-section-label">
+                        <span>Материалы</span>
+                        <span class="mdv-count">3</span>
+                      </div>
+                      <div class="mdv-list">
+                        <button type="button" class="mdv-row mdv-btn" data-demo-button>
+                          <span class="mdv-badge mdv-badge-figma">FIGMA</span>
+                          <span class="mdv-row-title">Q2 launch deck</span>
+                          <span class="mdv-row-action">Открыть</span>
+                        </button>
+                        <button type="button" class="mdv-row mdv-btn" data-demo-button>
+                          <span class="mdv-badge mdv-badge-notion">NOTION</span>
+                          <span class="mdv-row-title">Discussion notes</span>
+                          <span class="mdv-row-action">Открыть</span>
+                        </button>
+                        <button type="button" class="mdv-row mdv-btn" data-demo-button>
+                          <span class="mdv-badge mdv-badge-linear">LINEAR</span>
+                          <span class="mdv-row-title">Launch tasks</span>
+                          <span class="mdv-row-action">Открыть</span>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="mdv-section">
+                      <div class="mdv-section-label">
+                        <span>Участники</span>
+                        <span class="mdv-count">4</span>
+                      </div>
+                      <div class="mdv-list">
+                        <div class="mdv-row">
+                          <span class="mdv-avatar mdv-avatar-maya">MA</span>
+                          <span class="mdv-person">
+                            <span class="mdv-person-name">Maya</span>
+                            <span class="mdv-person-email">maya@pulsebar.app</span>
+                          </span>
+                          <span class="mdv-status mdv-status-accepted"><span>✓</span><span>принял</span></span>
+                        </div>
+                        <div class="mdv-row">
+                          <span class="mdv-avatar mdv-avatar-you">AN</span>
+                          <span class="mdv-person">
+                            <span class="mdv-person-name">Andrew</span>
+                            <span class="mdv-person-email">andrew@pulsebar.app</span>
+                          </span>
+                          <span class="mdv-you-chip">вы</span>
+                          <span class="mdv-status mdv-status-pending"><span>○</span><span>—</span></span>
+                        </div>
+                        <div class="mdv-row">
+                          <span class="mdv-avatar mdv-avatar-lena">LE</span>
+                          <span class="mdv-person">
+                            <span class="mdv-person-name">Lena</span>
+                            <span class="mdv-person-email">lena@pulsebar.app</span>
+                          </span>
+                          <span class="mdv-status mdv-status-tentative"><span>?</span><span>возможно</span></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+          <div class="what-board-extra">
+            <article class="what-mini">
+              <div class="what-mini-copy">
+                <span class="what-mini-kicker" data-i18n="what.extra.today.tag">Today view</span>
+                <h4 data-i18n="what.extra.today.title">A real list from the popover, with time, metadata, and Join state.</h4>
+                <p data-i18n="what.extra.today.body">This mirrors the real Today screen: back button, title, quick actions, and per-row join pills depending on what is live now.</p>
+              </div>
+              <div class="what-mini-demo">
+                <div class="fv-today">
+                  <div class="fv-today-head">
+                    <button type="button" class="fv-ui-btn fv-ui-icon" data-demo-button aria-label="Back">←</button>
+                    <span class="fv-today-title">Today, June 28</span>
+                    <div class="fv-today-actions">
+                      <button type="button" class="fv-ui-btn fv-ui-icon" data-demo-button aria-label="New event">＋</button>
+                      <button type="button" class="fv-ui-btn fv-ui-icon" data-demo-button aria-label="Calendar">◫</button>
+                    </div>
+                  </div>
+                  <div class="fv-today-list">
+                    <div class="fv-today-item">
+                      <div class="fv-today-copy">
+                        <strong>Ops standup</strong>
+                        <span>Slack Huddle · in 10 min</span>
+                      </div>
+                    </div>
+                    <div class="fv-today-item">
+                      <div class="fv-today-copy">
+                        <strong>1:1 with Maya</strong>
+                        <span>Zoom · in 35 min</span>
+                      </div>
+                    </div>
+                    <div class="fv-today-item fv-today-item-active">
+                      <div class="fv-today-copy">
+                        <strong><span class="fv-pop-live-dot"></span><span>Core UI review</span></strong>
+                        <span>Google Meet · live now</span>
+                      </div>
+                      <button type="button" class="fv-ui-btn fv-mini-join fv-mini-join-live" data-demo-button>Join</button>
+                    </div>
+                    <div class="fv-today-item">
+                      <div class="fv-today-copy">
+                        <strong>Customer kickoff</strong>
+                        <span>Microsoft Teams · in 1h 20m</span>
+                      </div>
+                      <button type="button" class="fv-ui-btn fv-mini-join" data-demo-button>Join</button>
+                    </div>
+                    <div class="fv-today-item">
+                      <div class="fv-today-copy">
+                        <strong>Focus block</strong>
+                        <span>No call link</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+            <article class="what-mini">
+              <div class="what-mini-copy">
+                <span class="what-mini-kicker" data-i18n="what.extra.join.tag">Meeting card</span>
+                <h4 data-i18n="what.extra.join.title">The main popover card bundles summary, actions, and materials.</h4>
+                <p data-i18n="what.extra.join.body">This mirrors the real meeting card: day summary, Today pill, title/meta tokens, materials count, Join, and keyboard hints at the bottom.</p>
+              </div>
+              <div class="what-mini-demo">
+                <div class="mcf-card">
+                  <div class="mcf-top">
+                    <div class="mcf-summary">
+                      <div class="mcf-greet">Good afternoon, Andrew</div>
+                      <div class="mcf-stats">June 28 • 7 meetings</div>
+                    </div>
+                    <div class="mcf-top-actions">
+                      <button type="button" class="mcf-btn mcf-pill" data-demo-button>Today</button>
+                      <button type="button" class="mcf-btn mcf-icon-btn" data-demo-button aria-label="Settings">
+                        <svg viewBox="0 0 14 14" aria-hidden="true">
+                          <path d="M7 1.9a.8.8 0 0 1 .78.62l.18.77a3.9 3.9 0 0 1 .8.33l.7-.39a.8.8 0 0 1 .97.12l.45.45a.8.8 0 0 1 .12.97l-.39.7c.13.26.24.53.33.8l.77.18a.8.8 0 0 1 .62.78v.64a.8.8 0 0 1-.62.78l-.77.18a3.9 3.9 0 0 1-.33.8l.39.7a.8.8 0 0 1-.12.97l-.45.45a.8.8 0 0 1-.97.12l-.7-.39c-.26.13-.53.24-.8.33l-.18.77A.8.8 0 0 1 7 12.1h-.64a.8.8 0 0 1-.78-.62l-.18-.77a3.9 3.9 0 0 1-.8-.33l-.7.39a.8.8 0 0 1-.97-.12l-.45-.45a.8.8 0 0 1-.12-.97l.39-.7a3.9 3.9 0 0 1-.33-.8l-.77-.18A.8.8 0 0 1 1.9 7v-.64a.8.8 0 0 1 .62-.78l.77-.18c.09-.27.2-.54.33-.8l-.39-.7a.8.8 0 0 1 .12-.97l.45-.45a.8.8 0 0 1 .97-.12l.7.39c.26-.13.53-.24.8-.33l.18-.77A.8.8 0 0 1 6.36 1.9H7Zm-.32 3.2a1.9 1.9 0 1 0 0 3.8 1.9 1.9 0 0 0 0-3.8Z"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="mcf-body">
+                    <div class="mcf-label">Up next</div>
+                    <div class="mcf-main-row">
+                      <div class="mcf-main-copy">
+                        <div class="mcf-title-row">
+                          <span class="mcf-live-dot"></span>
+                          <div class="mcf-title">Core UI review</div>
+                        </div>
+                        <div class="mcf-meta">Google Meet <span>•</span> in 5 min</div>
+                      </div>
+                      <div class="mcf-actions">
+                        <button type="button" class="mcf-btn mcf-icon-btn" data-demo-button aria-label="Calendar">
+                          <svg viewBox="0 0 14 14" aria-hidden="true">
+                            <path d="M4.3 1.7a.6.6 0 0 1 .6.6v.4h4.2v-.4a.6.6 0 1 1 1.2 0v.4h.5c.72 0 1.3.58 1.3 1.3v6.8c0 .72-.58 1.3-1.3 1.3H3.2c-.72 0-1.3-.58-1.3-1.3V4c0-.72.58-1.3 1.3-1.3h.5v-.4a.6.6 0 0 1 .6-.6Zm6.5 4.1H3.2v4.9h7.6V5.8Z"/>
+                          </svg>
+                        </button>
+                        <button type="button" class="mcf-btn mcf-icon-btn" data-demo-button aria-label="Materials">
+                          <svg viewBox="0 0 14 14" aria-hidden="true">
+                            <path d="M9.82 3.2a2.1 2.1 0 0 1 2.97 2.98L7.1 11.86A3.2 3.2 0 1 1 2.57 7.34l4.96-4.95a1.75 1.75 0 1 1 2.47 2.47L5.3 9.57a.8.8 0 1 1-1.13-1.13l4.3-4.3a.65.65 0 1 0-.92-.92L2.6 8.17a2.1 2.1 0 1 0 2.97 2.97l5.68-5.68a1 1 0 0 0-1.42-1.42L4.84 9.03"/>
+                          </svg>
+                        </button>
+                        <button type="button" class="mcf-btn mcf-join" data-demo-button>Join</button>
+                      </div>
+                    </div>
+                    <div class="mcf-divider"></div>
+                    <div class="mcf-footer">
+                      <span class="mcf-hint">Snooze <em>S</em></span>
+                      <span class="mcf-hint">Open in calendar <em>C</em></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         THREE BIG INTERACTIVE FEATURES · Dot-style, full-width
+         ═══════════════════════════════════════════════════════════════ -->
+
+    <!-- ─────────────────  NL PARSER · "just type it"  ───────────────── -->
+    <section id="nl" class="big-feature big-feature-peach">
+      <div class="mx-auto max-w-6xl px-6">
+        <div class="grid md:grid-cols-12 gap-12 items-center">
+          <div class="md:col-span-5">
+            <div class="flex items-center gap-2">
+              <span class="ftag ftag-coral" data-i18n-html="nl.tag">Natural language · <em class="serif-ital">new</em></span>
+            </div>
+            <h2 class="mt-5 font-serif text-[40px] md:text-[52px] leading-[1.05] tracking-[-0.02em]" data-i18n-html="nl.title">
+              Just type it. <em class="serif-ital">Pree gets it.</em>
+            </h2>
+            <p class="mt-5 text-[15px] text-ink-mid leading-[1.65] max-w-md" data-i18n-html="nl.body">
+              Stop fighting the form. Write the sentence you'd say out loud — Pree finds the
+              title, the time, the recurrence, and the duration in it. Confirm with <kbd>⏎</kbd>,
+              the event is on your calendar.
+            </p>
+            <div class="mt-6 flex flex-wrap gap-2 text-[11.5px] font-mono">
+              <button class="ex-btn" data-nl-example="design sync every mon 10am 45m">design sync every mon 10am 45m</button>
+              <button class="ex-btn" data-nl-example="lunch with Sam tomorrow 12:30 blue bottle">lunch with Sam tomorrow 12:30 blue bottle</button>
+              <button class="ex-btn" data-nl-example="1:1 Lena fri 3pm for 30">1:1 Lena fri 3pm for 30</button>
+            </div>
+          </div>
+
+          <div class="md:col-span-7">
+            <div class="nl-card">
+              <div class="nl-head">
+                <button type="button" class="nl-icon-btn" data-demo-button aria-label="Back">
+                  <svg viewBox="0 0 14 14" aria-hidden="true">
+                    <path d="M8.65 2.35 4.15 7l4.5 4.65-.85.85L2.5 7l5.3-5.5z"/>
+                  </svg>
+                </button>
+                <div class="nl-head-copy">
+                  <div class="nl-head-title">New event</div>
+                  <div class="nl-head-subtitle">Describe it in words</div>
+                </div>
+                <button type="button" class="nl-icon-btn" data-demo-button aria-label="Calendar">
+                  <svg viewBox="0 0 14 14" aria-hidden="true">
+                    <path d="M4.3 1.7a.6.6 0 0 1 .6.6v.4h4.2v-.4a.6.6 0 1 1 1.2 0v.4h.5c.72 0 1.3.58 1.3 1.3v6.8c0 .72-.58 1.3-1.3 1.3H3.2c-.72 0-1.3-.58-1.3-1.3V4c0-.72.58-1.3 1.3-1.3h.5v-.4a.6.6 0 0 1 .6-.6Zm6.5 4.1H3.2v4.9h7.6V5.8Z"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="nl-input-wrap">
+                <input
+                  type="text"
+                  class="nl-input"
+                  data-nl-input
+                  spellcheck="false"
+                  autocomplete="off"
+                  placeholder="Design sync next monday 3pm for 30 minutes"
+                />
+                <button type="button" class="nl-clear-btn" data-demo-button aria-label="Clear">
+                  <svg viewBox="0 0 14 14" aria-hidden="true">
+                    <path d="M4 4l6 6M10 4 4 10" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="nl-fields">
+                <div class="nl-row">
+                  <span class="nl-row-k">Topic</span>
+                  <span class="nl-row-v" data-nl-title>—</span>
+                </div>
+                <div class="nl-row">
+                  <span class="nl-row-k">Duration</span>
+                  <span class="nl-row-v" data-nl-dur>—</span>
+                </div>
+                <div class="nl-row">
+                  <span class="nl-row-k">Date</span>
+                  <span class="nl-row-v" data-nl-date>—</span>
+                </div>
+                <div class="nl-row">
+                  <span class="nl-row-k">Time</span>
+                  <span class="nl-row-v" data-nl-time>—</span>
+                </div>
+                <div class="nl-row">
+                  <span class="nl-row-k">Repeat</span>
+                  <span class="nl-row-v" data-nl-repeat>—</span>
+                </div>
+              </div>
+              <div class="nl-foot">
+                <button type="button" class="nl-pill-btn" data-demo-button>Today</button>
+                <button type="button" class="nl-icon-btn" data-demo-button aria-label="Settings">
+                  <svg viewBox="0 0 14 14" aria-hidden="true">
+                    <path d="M7 1.9a.8.8 0 0 1 .78.62l.18.77a3.9 3.9 0 0 1 .8.33l.7-.39a.8.8 0 0 1 .97.12l.45.45a.8.8 0 0 1 .12.97l-.39.7c.13.26.24.53.33.8l.77.18a.8.8 0 0 1 .62.78v.64a.8.8 0 0 1-.62.78l-.77.18a3.9 3.9 0 0 1-.33.8l.39.7a.8.8 0 0 1-.12.97l-.45.45a.8.8 0 0 1-.97.12l-.7-.39c-.26.13-.53.24-.8.33l-.18.77A.8.8 0 0 1 7 12.1h-.64a.8.8 0 0 1-.78-.62l-.18-.77a3.9 3.9 0 0 1-.8-.33l-.7.39a.8.8 0 0 1-.97-.12l-.45-.45a.8.8 0 0 1-.12-.97l.39-.7a3.9 3.9 0 0 1-.33-.8l-.77-.18A.8.8 0 0 1 1.9 7v-.64a.8.8 0 0 1 .62-.78l.77-.18c.09-.27.2-.54.33-.8l-.39-.7a.8.8 0 0 1 .12-.97l.45-.45a.8.8 0 0 1 .97-.12l.7.39c.26-.13.53-.24.8-.33l.18-.77A.8.8 0 0 1 6.36 1.9H7Zm-.32 3.2a1.9 1.9 0 1 0 0 3.8 1.9 1.9 0 0 0 0-3.8Z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────────  MONTH PEEK · hover a date, see events  ───────────────── -->
+    <section id="month" class="big-feature big-feature-sage">
+      <div class="mx-auto max-w-6xl px-6">
+        <div class="grid md:grid-cols-12 gap-12 items-center">
+          <div class="md:col-span-5 md:order-last">
+            <div class="flex items-center gap-2">
+              <span class="ftag ftag-forest" data-i18n="month.tag">Month at a glance</span>
+            </div>
+            <h2 class="mt-5 font-serif text-[40px] md:text-[52px] leading-[1.05] tracking-[-0.02em]" data-i18n-html="month.title">
+              Peek, <em class="serif-ital">don't open.</em>
+            </h2>
+            <p class="mt-5 text-[15px] text-ink-mid leading-[1.65] max-w-md" data-i18n="month.body">
+              A soft month-grid lives inside your menu bar. Hover any date — events slide in on
+              the side, no full Calendar launch, no context lost. Click to jump.
+            </p>
+            <p class="mt-5 text-[12.5px] font-mono text-ink-lo">
+              <span class="inline-block h-1.5 w-1.5 rounded-full bg-coral mr-1.5 align-middle"></span>
+              <span data-i18n="month.hint">hover the grid →</span>
+            </p>
+          </div>
+
+          <div class="md:col-span-7 md:order-first">
+            <div class="month-card">
+              <div class="month-head">
+                <span class="font-serif text-[22px]"><em class="serif-ital">April</em> 2026</span>
+                <div class="month-nav">
+                  <button type="button" class="month-arrow" data-month-prev data-i18n-aria="month.prev" aria-label="Previous month">‹</button>
+                  <button type="button" class="month-arrow" data-month-next data-i18n-aria="month.next" aria-label="Next month">›</button>
+                </div>
+              </div>
+
+              <div class="month-grid-wrap">
+                <div class="month-grid" data-month-grid>
+                  <span class="month-dow" data-i18n="month.dow.1">M</span><span class="month-dow" data-i18n="month.dow.2">T</span><span class="month-dow" data-i18n="month.dow.3">W</span><span class="month-dow" data-i18n="month.dow.4">T</span><span class="month-dow" data-i18n="month.dow.5">F</span><span class="month-dow" data-i18n="month.dow.6">S</span><span class="month-dow" data-i18n="month.dow.7">S</span>
+                  <!-- cells inserted by script.js -->
+                </div>
+
+                <aside class="month-peek" data-month-peek>
+                  <div class="month-peek-date" data-month-peek-date>Thu · Apr 23</div>
+                  <ul class="month-peek-list" data-month-peek-list>
+                    <li><span class="mp-dot mp-coral"></span><span class="mp-time">09:00</span><span class="mp-title">Design review</span></li>
+                    <li><span class="mp-dot mp-forest"></span><span class="mp-time">10:30</span><span class="mp-title">Weekly standup</span></li>
+                    <li><span class="mp-dot mp-peach"></span><span class="mp-time">14:00</span><span class="mp-title">Q4 planning</span></li>
+                  </ul>
+                </aside>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────────  SECONDARY FEATURES · small list, Memorisely dashboard  ───────────────── -->
+    <section class="py-16 md:py-24 border-t border-ink/10">
+      <div class="mx-auto max-w-6xl px-6">
+        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-lo" data-i18n="small.eyebrow">§ plus, all of this</p>
+        <h2 class="mt-3 font-serif text-[32px] md:text-[42px] leading-[1.08] tracking-[-0.02em]" data-i18n-html="small.title">
+          The small print, <em class="serif-ital text-ink-mid">with love.</em>
+        </h2>
+
+        <div class="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-8">
+          <div class="minor"><span class="minor-no">01</span><h4 data-i18n="small.01.h">Day summary</h4><p data-i18n="small.01.p">"23 Apr · 3 meetings · 2 hours of focus." A single honest line, not a dashboard.</p></div>
+          <div class="minor"><span class="minor-no">02</span><h4 data-i18n="small.02.h">Menu-bar tokens</h4><p data-i18n="small.02.p">Compose what shows in the bar — next event, countdown, week, second timezone, day progress.</p></div>
+          <div class="minor"><span class="minor-no">03</span><h4 data-i18n="small.03.h">Siri &amp; Shortcuts</h4><p data-i18n="small.03.p">"Hey Siri, join my next meeting." App Intents cover Shortcuts — and through Shortcuts, Stream Deck or any macro tool you already use.</p></div>
+          <div class="minor"><span class="minor-no">04</span><h4 data-i18n="small.04.h">Every calendar</h4><p data-i18n="small.04.p">iCloud, Google, Exchange — anything Calendar.app already knows about. No new account, no new login.</p></div>
+          <div class="minor"><span class="minor-no">05</span><h4 data-i18n="small.05.h">Plain-English</h4><p data-i18n-html="small.05.p">Not just create. <em>Move 1:1 to thu 3pm.</em> <em>Shorten standup to 15.</em> Pree understands.</p></div>
+          <div class="minor"><span class="minor-no">06</span><h4 data-i18n="small.06.h">Camera check</h4><p data-i18n="small.06.p">A five-second preview before you join — webcam, mic level, pick the right device. No surprises in the first frame.</p></div>
+          <div class="minor"><span class="minor-no">07</span><h4 data-i18n="small.07.h">Visible calendars</h4><p data-i18n="small.07.p">Pick exactly which calendars Pree watches. Toggle family off for the work day, flip it back at home.</p></div>
+          <div class="minor"><span class="minor-no">08</span><h4 data-i18n="small.08.h">Launches with Mac</h4><p data-i18n="small.08.p">Flip one switch. Registered via ServiceManagement — no login-items hacks.</p></div>
+          <div class="minor"><span class="minor-no">09</span><h4 data-i18n="small.09.h">Global hotkey</h4><p data-i18n="small.09.p">One chord — <kbd>⌥⌘Space</kbd> by default — opens Pree anywhere. Rebind it to whatever your muscle memory already expects.</p></div>
+          <div class="minor"><span class="minor-no">10</span><h4 data-i18n="small.10.h">Snooze 5</h4><p data-i18n="small.10.p">Press <kbd>S</kbd> on the alert and it slips away for five minutes, then quietly comes back. One calm step when you're not ready yet.</p></div>
+          <div class="minor"><span class="minor-no">11</span><h4 data-i18n="small.11.h">Liquid Glass-ready</h4><p data-i18n="small.11.p">Adopts the new Tahoe materials where available; falls back cleanly on Sonoma and Sequoia.</p></div>
+          <div class="minor"><span class="minor-no">12</span><h4 data-i18n="small.12.h">Appearance</h4><p data-i18n="small.12.p">Follow system, or pin Light or Dark when you're streaming or presenting.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────────  COMPOSE · interactive MEETING-CARD builder  ───────────────── -->
+    <section id="compose" class="py-24 md:py-32 border-t border-ink/10 relative overflow-hidden">
+      <div aria-hidden="true" class="pointer-events-none absolute -top-20 right-[-10%] w-[500px] h-[500px] rounded-full opacity-30 blur-3xl"
+           style="background: radial-gradient(closest-side, #D7E5DD, transparent);"></div>
+      <div aria-hidden="true" class="pointer-events-none absolute top-40 left-[-10%] w-[420px] h-[420px] rounded-full opacity-25 blur-3xl"
+           style="background: radial-gradient(closest-side, #F5C6A0, transparent);"></div>
+
+      <div class="relative mx-auto max-w-6xl px-6">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+          <div>
+            <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-lo" data-i18n="compose.eyebrow">§ compose meeting card</p>
+            <h2 class="mt-3 font-serif text-[40px] md:text-[54px] leading-[1.05] tracking-[-0.02em] max-w-2xl" data-i18n-html="compose.title">
+              The card, <em class="serif-ital">your way.</em>
+            </h2>
+            <p class="mt-5 max-w-xl text-[15px] text-ink-mid leading-[1.65]" data-i18n="compose.body">
+              Toggle pills on or off. Drag to reorder. The popover above is exactly what lands on
+              your screen before every meeting — nothing you don't ask for, everything you do.
+            </p>
+          </div>
+          <div class="text-[12px] font-mono text-ink-lo flex items-center gap-2">
+            <span class="h-1.5 w-1.5 rounded-full bg-coral animate-pulse"></span>
+            <span data-i18n="compose.livePreview">live preview · tap or drag</span>
+          </div>
+        </div>
+
+        <!-- Live meeting-card preview · cream single-row (Figma-faithful) -->
+        <div class="mt-12 mb-6">
+          <div class="mc-desk">
+            <div class="mc-card" data-mc-card>
+              <div class="mc-head">
+                <div class="mc-head-text">
+                  <div class="mc-title-row">
+                    <span class="mc-dot" aria-hidden="true"></span>
+                    <span class="mc-title" data-i18n="compose.card.title">Design review</span>
+                  </div>
+                  <div class="mc-sub" data-mc-sub>
+                    <span class="mc-sub-provider" data-mc-provider>Zoom</span>
+                    <span class="mc-sub-sep" aria-hidden="true">•</span>
+                    <span class="mc-countdown" data-i18n="compose.card.countdown">in 5 min</span>
+                  </div>
+                </div>
+                <div class="mc-actions">
+                  <button type="button" class="mc-icon-btn" aria-label="Open in Calendar" data-i18n-aria="compose.card.calendarAria" title="Open in Calendar">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  </button>
+                  <button type="button" class="mc-icon-btn" aria-label="Materials" data-mc-materials-btn data-i18n-aria="compose.card.materialsAria" hidden>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                  </button>
+                  <button type="button" class="mc-join"><span data-i18n="compose.card.join">Join</span></button>
+                </div>
+              </div>
+              <ul class="mc-fields" data-mc-preview>
+                <!-- populated by script.js from active pills -->
+              </ul>
+            </div>
+          </div>
+          <p class="mt-4 text-center text-[11px] font-mono text-ink-lo" data-i18n="compose.caption">
+            ↑ this is the meeting card in the menubar popover
+          </p>
+        </div>
+
+        <!-- Pill tray -->
+        <div class="token-tray" data-pill-tray>
+          <div class="token-tray-head">
+            <span class="font-mono text-[11px] uppercase tracking-[0.16em] text-ink-lo"><span data-pill-count>2</span> <span data-i18n="compose.tray.active">active · 10 available</span></span>
+            <button type="button" class="token-reset" data-pill-reset data-i18n="compose.tray.reset">Reset</button>
+          </div>
+
+          <p class="text-[12px] text-ink-lo mt-1 mb-4 font-mono" data-i18n="compose.tray.activeHint">active · click to remove, drag to reorder. Title always stays.</p>
+          <ul class="pill-list pill-list-active" data-pill-list-active>
+            <li class="pill-chip is-active" data-pill="countdown" data-label="Countdown" data-render="in 5 min" draggable="true"><span class="pill-grip">⋮⋮</span><span class="pill-label" data-i18n="pill.countdown">Countdown</span></li>
+            <li class="pill-chip is-active" data-pill="organizer" data-label="Organizer" data-render="Lena K." draggable="true"><span class="pill-grip">⋮⋮</span><span class="pill-label" data-i18n="pill.organizer">Organizer</span></li>
+          </ul>
+
+          <p class="text-[12px] text-ink-lo mt-6 mb-3 font-mono" data-i18n="compose.tray.availableHint">available · tap to add</p>
+          <ul class="pill-list pill-list-pool" data-pill-list-pool>
+            <li class="pill-chip" data-pill="status"    data-label="Status"     data-render="Confirmed"><span class="pill-label" data-i18n="pill.status">Status</span></li>
+            <li class="pill-chip" data-pill="provider"  data-label="Provider"   data-render="Zoom"><span class="pill-label" data-i18n="pill.provider">Provider</span></li>
+            <li class="pill-chip" data-pill="time"      data-label="Time"       data-render="Today · 14:30"><span class="pill-label" data-i18n="pill.time">Time</span></li>
+            <li class="pill-chip" data-pill="place"     data-label="Place"      data-render="Studio A · Hayes Valley"><span class="pill-label" data-i18n="pill.place">Place</span></li>
+            <li class="pill-chip" data-pill="attendees" data-label="Attendees"  data-render="4 people"><span class="pill-label" data-i18n="pill.attendees">Attendees</span></li>
+            <li class="pill-chip" data-pill="mid"       data-label="Meeting ID" data-render="847 291 038"><span class="pill-label" data-i18n="pill.mid">Meeting ID</span></li>
+            <li class="pill-chip" data-pill="calendar"  data-label="Calendar"   data-render="Work · Google"><span class="pill-label" data-i18n="pill.calendar">Calendar</span></li>
+            <li class="pill-chip" data-pill="note"      data-label="Note"       data-render="Bring the Loom link"><span class="pill-label" data-i18n="pill.note">Note</span></li>
+            <li class="pill-chip" data-pill="materials" data-label="Materials"  data-render="Figma · Q4 Planning"><span class="pill-label" data-i18n="pill.materials">Materials</span></li>
+            <li class="pill-chip" data-pill="week"      data-label="Week"       data-render="W12 · Mon"><span class="pill-label" data-i18n="pill.week">Week</span></li>
+          </ul>
+
+          <p class="mt-6 text-[11.5px] text-ink-lo leading-relaxed" data-i18n="compose.tray.footer">
+            Some values only appear when the event has the data.
+          </p>
+
+          <div class="token-presets">
+            <span class="font-mono text-[11px] text-ink-lo" data-i18n="compose.presets.label">Presets:</span>
+            <button type="button" class="preset-btn" data-mc-preset="minimal" data-i18n="compose.presets.minimal">Minimal</button>
+            <button type="button" class="preset-btn" data-mc-preset="default" data-i18n="compose.presets.default">Default</button>
+            <button type="button" class="preset-btn" data-mc-preset="remote" data-i18n="compose.presets.remote">Remote team</button>
+            <button type="button" class="preset-btn" data-mc-preset="full" data-i18n="compose.presets.full">Everything</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────────  STATS · big editorial numbers  ───────────────── -->
+    <section class="py-16 md:py-20 bg-paper2 border-y border-ink/10">
+      <div class="mx-auto max-w-6xl px-6 grid grid-cols-2 md:grid-cols-4 gap-y-10">
+        <div class="stat-cell">
+          <div class="stat-n">~24<span class="stat-u">MB</span></div>
+          <div class="stat-l" data-i18n="stats.mem">Resident memory</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-n">&lt;100<span class="stat-u">ms</span></div>
+          <div class="stat-l" data-i18n="stats.launch">Cold launch</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-n">~0.2<span class="stat-u">%</span></div>
+          <div class="stat-l" data-i18n="stats.cpu">CPU at rest</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-n stat-accent">0<span class="stat-u">bytes</span></div>
+          <div class="stat-l" data-i18n="stats.server">Sent to a server</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────────  DESIGN RULES · notes I'm building by  ───────────────── -->
+    <section id="words" class="py-24 md:py-32">
+      <div class="mx-auto max-w-6xl px-6">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+          <div>
+            <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-lo" data-i18n="words.eyebrow">§ rules I build by</p>
+            <h2 class="mt-3 font-serif text-[40px] md:text-[54px] leading-[1.05] tracking-[-0.02em] max-w-2xl" data-i18n-html="words.title">
+              A few <em class="serif-ital">small principles</em><br/>
+              taped above the desk.
+            </h2>
+          </div>
+          <p class="text-[12.5px] text-ink-lo font-mono max-w-xs" data-i18n="words.note">
+            Not marketing — the actual notes on the wall while making Pree.
+          </p>
+        </div>
+
+        <div class="mt-14 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <blockquote class="quote">
+            <p class="q-body" data-i18n="words.q1.body">"The pre-call card should already be there. You don't configure it. You just press a key."</p>
+            <footer class="q-foot">
+              <div class="q-ava q-ava-coral">01</div>
+              <div><div class="q-name" data-i18n="words.q1.name">Calm by default</div><div class="q-role" data-i18n="words.q1.role">one keystroke, zero setup</div></div>
+            </footer>
+          </blockquote>
+
+          <blockquote class="quote">
+            <p class="q-body" data-i18n="words.q2.body">"Fewer features than the big calendar apps. On purpose. The ones that stay earn their place by being touched ten times a day."</p>
+            <footer class="q-foot">
+              <div class="q-ava q-ava-forest">02</div>
+              <div><div class="q-name" data-i18n="words.q2.name">Fewer, on purpose</div><div class="q-role" data-i18n="words.q2.role">subtraction as a feature</div></div>
+            </footer>
+          </blockquote>
+
+          <blockquote class="quote">
+            <p class="q-body" data-i18n="words.q3.body">"The mic and camera preview is the whole reason for the pre-call card. Catch the wrong input before the first frame of the meeting, not after."</p>
+            <footer class="q-foot">
+              <div class="q-ava q-ava-peach">03</div>
+              <div><div class="q-name" data-i18n="words.q3.name">Catch it early</div><div class="q-role" data-i18n="words.q3.role">five seconds beats five minutes</div></div>
+            </footer>
+          </blockquote>
+
+          <blockquote class="quote">
+            <p class="q-body" data-i18n-html="words.q4.body">"What's <em>not</em> here matters most. No login. No onboarding. No newsletter. Install, grant calendar access, done."</p>
+            <footer class="q-foot">
+              <div class="q-ava q-ava-sage">04</div>
+              <div><div class="q-name" data-i18n="words.q4.name">Very Mac</div><div class="q-role" data-i18n="words.q4.role">no account, no server</div></div>
+            </footer>
+          </blockquote>
+
+          <blockquote class="quote">
+            <p class="q-body" data-i18n-html="words.q5.body">"If I can type <code class="q-code">move 1:1 to thu 3pm</code> and it just happens, the rest is a bonus."</p>
+            <footer class="q-foot">
+              <div class="q-ava q-ava-coral">05</div>
+              <div><div class="q-name" data-i18n="words.q5.name">Plain English</div><div class="q-role" data-i18n="words.q5.role">text in, event out</div></div>
+            </footer>
+          </blockquote>
+
+          <blockquote class="quote">
+            <p class="q-body" data-i18n="words.q6.body">"It should run on any Mac that still runs the current macOS. Light on battery, quiet on CPU. The bar is simple: never the reason the fan spins up."</p>
+            <footer class="q-foot">
+              <div class="q-ava q-ava-forest">06</div>
+              <div><div class="q-name" data-i18n="words.q6.name">Quiet on the machine</div><div class="q-role" data-i18n="words.q6.role">never the loud app</div></div>
+            </footer>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────────  PRICING · two cards, Memorisely  ───────────────── -->
+    <section id="pricing" class="py-24 md:py-32 bg-paper2 border-y border-ink/10">
+      <div class="mx-auto max-w-5xl px-6">
+        <div class="text-center max-w-2xl mx-auto">
+          <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-lo" data-i18n="pricing.eyebrow">§ what it costs</p>
+          <h2 class="mt-3 font-serif text-[40px] md:text-[56px] leading-[1.05] tracking-[-0.02em]" data-i18n-html="pricing.title">
+            Nineteen dollars, <em class="serif-ital">once.</em>
+          </h2>
+          <p class="mt-5 text-[15px] text-ink-mid leading-[1.6]" data-i18n="pricing.body">
+            No subscription. No renewal email. The license is yours; every v1.x update is included
+            forever. When v2 lands it'll be a reduced-price upgrade — only when there's a year of
+            real new work behind it.
+          </p>
+        </div>
+
+        <div class="mt-14 grid md:grid-cols-2 gap-5 max-w-4xl mx-auto">
+          <!-- Try card (soft) -->
+          <div class="plan plan-soft">
+            <div class="plan-head">
+              <span class="ftag ftag-sage" data-i18n="pricing.try.tag">Try</span>
+              <span class="font-mono text-[11px] text-ink-lo" data-i18n="pricing.try.sub">no card · full feature set</span>
+            </div>
+            <div class="mt-6 flex items-baseline gap-2">
+              <span class="font-serif text-[72px] leading-none" data-i18n="pricing.try.price">Free</span>
+            </div>
+            <p class="mt-3 text-[13px] text-ink-mid" data-i18n="pricing.try.desc">Download, grant calendar access, and live with Pree for as long as you need. No card, no email gate. Decide after you've actually used it for a week or two.</p>
+
+            <ul class="mt-7 space-y-2.5 text-[13.5px] text-ink-mid">
+              <li class="li-tick"><span>✓</span> <span data-i18n="pricing.try.li1">All menu-bar tokens</span></li>
+              <li class="li-tick"><span>✓</span> <span data-i18n="pricing.try.li2">Quick Bar, Materials, Preflight</span></li>
+              <li class="li-tick"><span>✓</span> <span data-i18n="pricing.try.li3">Siri &amp; App Intents</span></li>
+              <li class="li-tick"><span>✓</span> <span data-i18n="pricing.try.li4">Every calendar account</span></li>
+            </ul>
+
+            <a href="#" class="btn-paper-lg mt-8">
+              <span data-i18n="pricing.try.cta">Download Pree free</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+          </div>
+
+          <!-- Own card (ink) -->
+          <div class="plan plan-ink">
+            <div class="plan-head">
+              <span class="ftag ftag-coral" data-i18n="pricing.own.tag">Own it</span>
+              <span class="font-mono text-[11px] text-cream/60" data-i18n="pricing.own.sub">one-time · personal license</span>
+            </div>
+            <div class="mt-6 flex items-baseline gap-3">
+              <span class="font-serif text-[72px] leading-none text-cream">$19</span>
+            </div>
+            <p class="mt-3 text-[13px] text-cream/60 font-mono" data-i18n="pricing.own.code">one payment, no subscription</p>
+
+            <ul class="mt-7 space-y-2.5 text-[13.5px] text-cream/70">
+              <li class="li-tick li-tick-light"><span>✓</span> <span data-i18n="pricing.own.li1">Every feature, forever</span></li>
+              <li class="li-tick li-tick-light"><span>✓</span> <span data-i18n="pricing.own.li2">All v1.x updates · free</span></li>
+              <li class="li-tick li-tick-light"><span>✓</span> <span data-i18n="pricing.own.li3">Honest refund if it's not for you</span></li>
+              <li class="li-tick li-tick-light"><span>✓</span> <span data-i18n="pricing.own.li4">Replies come from the maker</span></li>
+            </ul>
+
+            <a href="#" class="btn-cream-lg mt-8">
+              <span data-i18n="pricing.own.cta">Own Pree · $19</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </a>
+            <p class="mt-4 text-center text-[11px] text-cream/40 font-mono" data-i18n="pricing.own.paddle">one-time payment · personal license</p>
+          </div>
+        </div>
+
+        <p class="mt-8 text-center text-[11.5px] text-ink-lo font-mono" data-i18n="pricing.footer">
+          macOS 13 Ventura or newer · Apple Silicon &amp; Intel
+        </p>
+      </div>
+    </section>
+
+    <!-- ─────────────────  FOUNDER NOTE · Yukee centered serenity  ───────────────── -->
+    <section class="py-24 md:py-32">
+      <div class="mx-auto max-w-2xl px-6 text-center">
+        <div class="founder-avatar-wrap">
+          <img
+            src="assets/founder-avatar.png"
+            alt="Andrew"
+            class="founder-avatar"
+            loading="lazy"
+          />
+        </div>
+        <p class="mt-8 font-serif text-[24px] md:text-[28px] leading-[1.45] text-ink" data-i18n-html="founder.body">
+          Pree started as a weekend fix for <em class="serif-ital">my own</em> scattered week.
+          I shipped it because the only thing worse than missing a call is the apology afterwards.
+        </p>
+        <p class="mt-5 text-[13.5px] text-ink-mid max-w-md mx-auto leading-[1.65]" data-i18n="founder.note">
+          If anything about the app feels off, write to me. You'll be talking to the one person
+          who writes the code. That's the whole team.
+        </p>
+        <p class="mt-7 font-mono text-[11.5px] text-ink-lo uppercase tracking-[0.18em]" data-i18n="founder.sig">
+          — Andrew · maker of Pree
+        </p>
+      </div>
+    </section>
+
+    <!-- ─────────────────  FAQ · flat, restrained  ───────────────── -->
+    <section id="faq" class="py-24 md:py-32 bg-paper2 border-y border-ink/10">
+      <div class="mx-auto max-w-3xl px-6">
+        <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-lo" data-i18n="faq.eyebrow">§ faq</p>
+        <h2 class="mt-3 font-serif text-[40px] md:text-[52px] leading-[1.05] tracking-[-0.02em]" data-i18n-html="faq.title">
+          Things people <em class="serif-ital">ask.</em>
+        </h2>
+
+        <div class="mt-14 space-y-3">
+          <details class="faq-item" open>
+            <summary><span class="q-num">01</span><span class="faq-q" data-i18n="faq.q1">Does Pree need an account? Can it see my work calendar?</span><span class="faq-toggle" aria-hidden="true">+</span></summary>
+            <p class="a" data-i18n="faq.a1">No account, ever. Pree reads through EventKit — the same framework Calendar.app uses. If a calendar appears in Calendar (iCloud, Google, Exchange, and anything else Apple Calendar already knows about), Pree sees it automatically.</p>
+          </details>
+          <details class="faq-item">
+            <summary><span class="q-num">02</span><span class="faq-q" data-i18n="faq.q2">How does the trial work?</span><span class="faq-toggle" aria-hidden="true">+</span></summary>
+            <p class="a" data-i18n="faq.a2">Download it, every feature on. No card, no email gate. Use it as long as you need to make up your mind — then buy a one-time license when it earns the spot in your menu bar.</p>
+          </details>
+          <details class="faq-item">
+            <summary><span class="q-num">03</span><span class="faq-q" data-i18n="faq.q3">Is anything about my meetings sent anywhere?</span><span class="faq-toggle" aria-hidden="true">+</span></summary>
+            <p class="a" data-i18n="faq.a3">No. Pree reads the local Calendar database and never transmits event content. The only network calls the app makes are anonymous update checks and license validation.</p>
+          </details>
+          <details class="faq-item">
+            <summary><span class="q-num">04</span><span class="faq-q" data-i18n="faq.q4">Which meeting services auto-join?</span><span class="faq-toggle" aria-hidden="true">+</span></summary>
+            <p class="a" data-i18n="faq.a4">Zoom, Google Meet, Microsoft Teams, Webex, Whereby, Jitsi, Discord voice channels, and Slack huddles are detected by provider. Any other link opens in your default browser in one tap.</p>
+          </details>
+          <details class="faq-item">
+            <summary><span class="q-num">05</span><span class="faq-q" data-i18n="faq.q5">Intel Macs?</span><span class="faq-toggle" aria-hidden="true">+</span></summary>
+            <p class="a" data-i18n="faq.a5">Yes — universal binary. Minimum macOS 13 Ventura. Most at home on macOS Tahoe with Liquid Glass, but runs well on Sonoma and Sequoia.</p>
+          </details>
+          <details class="faq-item">
+            <summary><span class="q-num">06</span><span class="faq-q" data-i18n="faq.q6">Upgrade policy?</span><span class="faq-toggle" aria-hidden="true">+</span></summary>
+            <p class="a" data-i18n="faq.a6">The license you buy today covers every v1.x update. Major new versions (v2, v3…) will be a paid upgrade at a reduced price for existing users — but only when there's a year of real new work in the box.</p>
+          </details>
+          <details class="faq-item">
+            <summary><span class="q-num">07</span><span class="faq-q" data-i18n="faq.q7">What if I don't like it?</span><span class="faq-toggle" aria-hidden="true">+</span></summary>
+            <p class="a" data-i18n-html="faq.a7">Write to <a href="mailto:hey@pulsebar.app" class="underline decoration-ink-lo underline-offset-4 hover:decoration-coral hover:text-coral">hey@pulsebar.app</a>. I'd rather people use Pree because they love it — if it's not for you, just say so.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─────────────────  FOOTER · Yukee signoff  ───────────────── -->
+    <footer class="py-16">
+      <div class="mx-auto max-w-4xl px-6 text-center">
+        <img class="brand-mark brand-mark-lg mx-auto" src="assets/brand-mark.svg" alt="" width="40" height="40" draggable="false" />
+        <p class="mt-6 font-serif text-[20px] md:text-[22px] text-ink leading-[1.4]" data-i18n-html="footer.signoff">
+          Designed with care on a slow afternoon,<br/>
+          <em class="serif-ital text-ink-mid">for anyone whose week is mostly calls.</em>
+        </p>
+        <div class="mt-8 flex items-center justify-center gap-5 text-[12px] font-mono text-ink-lo">
+          <a href="#faq" class="hover:text-ink transition" data-i18n="footer.faq">faq</a>
+          <span class="text-ink-faint">·</span>
+          <a href="#pricing" class="hover:text-ink transition" data-i18n="footer.pricing">pricing</a>
+          <span class="text-ink-faint">·</span>
+          <a href="mailto:hey@pulsebar.app" class="hover:text-ink transition" data-i18n="footer.contact">contact</a>
+          <span class="text-ink-faint">·</span>
+          <a href="#" class="hover:text-ink transition" data-i18n="footer.privacy">privacy</a>
+          <span class="text-ink-faint">·</span>
+          <a href="#" class="hover:text-ink transition" data-i18n="footer.changelog">changelog</a>
+        </div>
+        <p class="mt-6 text-[11px] text-ink-lo font-mono" data-i18n="footer.meta">
+          Pree · v1.0 · © 2026 · made by one person, slowly
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
