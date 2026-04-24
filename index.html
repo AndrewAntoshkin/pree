@@ -1189,7 +1189,19 @@
             <span class="font-mono text-[11px] text-ink-lo" data-i18n="waitlist.sub">$9.99 · forever · one-time</span>
           </div>
 
-          <form class="waitlist-form mt-7" novalidate>
+          <form
+            class="waitlist-form mt-7"
+            action="https://api.web3forms.com/submit"
+            method="POST"
+            novalidate
+          >
+            <!-- Web3Forms public access key (safe to expose, rate-limited per origin) -->
+            <input type="hidden" name="access_key" value="577382b0-e4ab-49b0-ba59-63de24b2c8f8" />
+            <input type="hidden" name="subject" value="New Pree waitlist signup" />
+            <input type="hidden" name="from_name" value="Pree · waitlist" />
+            <!-- Honeypot (bots fill it, humans never see it) -->
+            <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="display:none" />
+
             <label for="wl-email" class="sr-only" data-i18n="waitlist.label">Your email</label>
             <div class="wl-input-wrap">
               <input
@@ -1209,6 +1221,7 @@
             </div>
             <p class="wl-note mt-4 font-mono text-[11px] text-ink-lo" data-i18n="waitlist.note">No spam. One email when access opens.</p>
             <p class="wl-thanks mt-4 font-mono text-[12px] text-forest" data-i18n="waitlist.thanks" hidden>You're in. We'll email you the second the doors open.</p>
+            <p class="wl-error mt-4 font-mono text-[12px] text-coral" hidden>Couldn't reach the waitlist. Check your connection and try again.</p>
           </form>
         </div>
 

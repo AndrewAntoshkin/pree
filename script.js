@@ -2022,14 +2022,23 @@
   }
 
   // ───────────────────────────────────────────────
-  // Waitlist form — client-side only for now. Persists any entered email
-  // to localStorage and flips the form into a "thanks" state. When the
-  // real backend is ready this can POST to /waitlist instead.
+  // Waitlist form — POSTs to Web3Forms (https://web3forms.com/).
+  // The access_key lives in the HTML as a hidden input (it's a public
+  // key by design — rate-limited per origin on Web3Forms' side).
+  // On success: flips to "thanks" state + caches in localStorage so
+  // returning visitors see the thank-you message instantly.
+  // On failure: shows the inline error, keeps the form interactive.
   // ───────────────────────────────────────────────
   function mountWaitlist() {
     const form = document.querySelector(".waitlist-form");
     if (!form) return;
+
     const thanks = form.querySelector(".wl-thanks");
+    const errorEl = form.querySelector(".wl-error");
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const submitLabel = submitBtn && submitBtn.querySelector("span");
+    const originalLabel = submitLabel ? submitLabel.textContent : "";
+
     if (thanks) thanks.hidden = false;
     form.dataset.state = "idle";
 
@@ -2037,16 +2046,43 @@
       form.dataset.state = "submitted";
     }
 
-    form.addEventListener("submit", (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
+      if (form.dataset.state === "sending" || form.dataset.state === "submitted") return;
+
       const input = form.querySelector('input[type="email"]');
       if (!input || !input.checkValidity()) {
         input && input.focus();
         return;
       }
-      try { localStorage.setItem("pree.waitlist.email", input.value.trim()); } catch (_) {}
-      try { localStorage.setItem("pree.waitlist.joined", "1"); } catch (_) {}
-      form.dataset.state = "submitted";
+
+      const email = input.value.trim();
+      if (errorEl) errorEl.hidden = true;
+      form.dataset.state = "sending";
+      if (submitLabel) submitLabel.textContent = "Sending…";
+      if (submitBtn) submitBtn.disabled = true;
+
+      try {
+        const payload = new FormData(form);
+        const res = await fetch(form.action, {
+          method: "POST",
+          body: payload,
+          headers: { Accept: "application/json" },
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || data.success === false) {
+          throw new Error(data.message || "Request failed");
+        }
+        try { localStorage.setItem("pree.waitlist.email", email); } catch (_) {}
+        try { localStorage.setItem("pree.waitlist.joined", "1"); } catch (_) {}
+        form.dataset.state = "submitted";
+      } catch (err) {
+        form.dataset.state = "idle";
+        if (submitLabel) submitLabel.textContent = originalLabel;
+        if (submitBtn) submitBtn.disabled = false;
+        if (errorEl) errorEl.hidden = false;
+        if (window.console) console.warn("[waitlist] submission failed:", err);
+      }
     });
   }
 

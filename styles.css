@@ -2433,11 +2433,14 @@ button.mdv-row:hover {
   flex-shrink: 0;
 }
 .waitlist-form .wl-note,
-.waitlist-form .wl-thanks { text-align: center; }
+.waitlist-form .wl-thanks,
+.waitlist-form .wl-error { text-align: center; }
 .waitlist-form .wl-thanks { display: none; }
 .waitlist-form[data-state="submitted"] .wl-input-wrap,
 .waitlist-form[data-state="submitted"] .wl-note { display: none; }
 .waitlist-form[data-state="submitted"] .wl-thanks { display: block; }
+.waitlist-form[data-state="sending"] .wl-btn { opacity: 0.7; cursor: progress; }
+.waitlist-form[data-state="sending"] .wl-input { opacity: 0.8; }
 
 @media (max-width: 540px) {
   .waitlist-card { padding: 22px; border-radius: 18px; }
