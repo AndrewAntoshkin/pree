@@ -1732,9 +1732,9 @@
       { sel: "p[data-i18n='hero.fine']", cls: "reveal-soft", hero: true, base: 950 },
       { sel: ".trust-card", cls: "reveal-blur", hero: true, base: 360 },
 
-      // ───── manifesto (the short belief block) — blur cascade, one line after another
+      // ───── manifesto (the short belief block) — each belief line gets pulled up
       { sel: "section .font-mono[data-i18n='manifesto.eyebrow']", cls: "reveal-blur" },
-      { sel: "[data-i18n-html='manifesto.body'] > p", cls: "reveal-soft", groupStep: 110 },
+      { sel: "[data-i18n-html='manifesto.body'] > p", cls: "reveal-pull-soft", groupStep: 110 },
 
       // ───── what it does
       { sel: "[data-i18n='what.eyebrow']", cls: "reveal-blur" },
@@ -1746,14 +1746,14 @@
       // ───── NL parser (big-feature peach)
       { sel: "#nl [data-i18n-html='nl.tag']", cls: "reveal-blur" },
       { sel: "#nl h2[data-i18n-html='nl.title']", cls: "rv-split", split: "words" },
-      { sel: "#nl p[data-i18n-html='nl.body']", cls: "reveal-soft" },
+      { sel: "#nl p[data-i18n-html='nl.body']", cls: "reveal-pull-soft" },
       { sel: "#nl .ex-btn", cls: "reveal-rise", groupStep: 70 },
       { sel: "#nl .nl-card", cls: "reveal-slide-r" },
 
       // ───── month peek (big-feature sage)
       { sel: "#month [data-i18n='month.tag']", cls: "reveal-blur" },
       { sel: "#month h2[data-i18n-html='month.title']", cls: "rv-split", split: "words" },
-      { sel: "#month [data-i18n='month.body']", cls: "reveal-soft" },
+      { sel: "#month [data-i18n='month.body']", cls: "reveal-pull-soft" },
       { sel: "#month [data-i18n='month.hint']", cls: "reveal-soft" },
       { sel: "#month .month-card", cls: "reveal-slide-l" },
 
@@ -1765,7 +1765,7 @@
       // ───── compose (meeting-card builder)
       { sel: "[data-i18n='compose.eyebrow']", cls: "reveal-blur" },
       { sel: "h2[data-i18n-html='compose.title']", cls: "rv-split", split: "words" },
-      { sel: "#compose p[data-i18n='compose.body']", cls: "reveal-soft" },
+      { sel: "#compose p[data-i18n='compose.body']", cls: "reveal-pull-soft" },
       { sel: ".mc-card", cls: "reveal-zoom" },
       { sel: ".token-tray", cls: "reveal-soft" },
 
@@ -1781,19 +1781,19 @@
       // ───── waitlist (temporary replacement for pricing cards)
       { sel: "[data-i18n='waitlist.eyebrow']", cls: "reveal-blur" },
       { sel: "h2[data-i18n-html='waitlist.title']", cls: "rv-split", split: "words" },
-      { sel: "p[data-i18n-html='waitlist.body']", cls: "reveal-soft" },
+      { sel: "p[data-i18n-html='waitlist.body']", cls: "reveal-pull-soft" },
       { sel: ".waitlist-card", cls: "reveal-zoom" },
       { sel: "[data-i18n='pricing.footer']", cls: "reveal-soft" },
 
       // ───── pricing (kept for when payments are wired; selectors harmless if unmounted)
       { sel: "[data-i18n='pricing.eyebrow']", cls: "reveal-blur" },
       { sel: "h2[data-i18n-html='pricing.title']", cls: "rv-split", split: "words" },
-      { sel: "p[data-i18n='pricing.body']", cls: "reveal-soft" },
+      { sel: "p[data-i18n='pricing.body']", cls: "reveal-pull-soft" },
       { sel: ".plan", cls: "reveal-zoom", groupStep: 130 },
 
       // ───── founder note
       { sel: ".founder-avatar-wrap", cls: "reveal-zoom" },
-      { sel: "p[data-i18n-html='founder.body']", cls: "reveal-soft", base: 120 },
+      { sel: "p[data-i18n-html='founder.body']", cls: "reveal-pull-soft", base: 120 },
       { sel: "p[data-i18n='founder.note']", cls: "reveal-soft", base: 220 },
       { sel: "p[data-i18n='founder.sig']", cls: "reveal-blur", base: 320 },
 

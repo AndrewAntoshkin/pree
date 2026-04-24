@@ -4699,27 +4699,67 @@ html[lang="ru"] .font-mono.uppercase {
    ═══════════════════════════════════════════════════════════════ */
 
 :root {
+  /* Smooth ease — used for opacity/filter (no visual flicker at overshoot) */
   --rv-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  /* Soft bounce — subtle ~5% overshoot for everyday content */
+  --rv-ease-bounce: cubic-bezier(0.22, 1.18, 0.36, 1);
+  /* Pronounced bounce — ~14% overshoot for emphasis blocks (pull / zoom cards) */
+  --rv-ease-bounce-lg: cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* Gentle spring — long elastic settle */
+  --rv-ease-spring: cubic-bezier(0.16, 1.22, 0.24, 1);
   --rv-dur: 880ms;
   --rv-dur-long: 1150ms;
+  --rv-dur-bounce: 980ms;
 }
 
 [class*="reveal-"] {
   opacity: 0;
   will-change: opacity, transform, filter;
+  /* Transform runs on the bounce curve (element overshoots and settles back),
+     while opacity/filter stay on the smooth curve so the fade-in never flickers
+     while the element is overshooting its rest position. */
   transition:
     opacity var(--rv-dur) var(--rv-ease),
-    transform var(--rv-dur) var(--rv-ease),
+    transform var(--rv-dur-bounce) var(--rv-ease-bounce),
     filter var(--rv-dur) var(--rv-ease);
   transition-delay: var(--rv-delay, 0ms);
 }
 
-.reveal-soft   { transform: translate3d(0, 14px, 0); filter: blur(6px); }
-.reveal-blur   { transform: translate3d(0, 18px, 0); filter: blur(14px); }
-.reveal-rise   { transform: translate3d(0, 28px, 0); }
-.reveal-zoom   { transform: translate3d(0, 22px, 0) scale(0.965); filter: blur(10px); }
-.reveal-slide-l{ transform: translate3d(-28px, 0, 0); filter: blur(8px); }
-.reveal-slide-r{ transform: translate3d(28px,  0, 0); filter: blur(8px); }
+.reveal-soft   { transform: translate3d(0, 18px, 0); filter: blur(6px); }
+.reveal-blur   { transform: translate3d(0, 20px, 0); filter: blur(14px); }
+.reveal-rise   { transform: translate3d(0, 32px, 0); }
+.reveal-zoom   { transform: translate3d(0, 26px, 0) scale(0.95); filter: blur(10px); }
+.reveal-slide-l{ transform: translate3d(-32px, 0, 0); filter: blur(8px); }
+.reveal-slide-r{ transform: translate3d(32px,  0, 0); filter: blur(8px); }
+
+/* Pull — content feels physically yanked up from below with a spring landing.
+   Use for section body copy and major content blocks where extra character
+   is welcome. */
+.reveal-pull {
+  transform: translate3d(0, 44px, 0);
+  filter: blur(4px);
+  transition:
+    opacity var(--rv-dur) var(--rv-ease),
+    transform var(--rv-dur-long) var(--rv-ease-bounce-lg),
+    filter var(--rv-dur) var(--rv-ease);
+}
+.reveal-pull-soft {
+  transform: translate3d(0, 30px, 0);
+  filter: blur(3px);
+  transition:
+    opacity var(--rv-dur) var(--rv-ease),
+    transform var(--rv-dur-bounce) var(--rv-ease-spring),
+    filter var(--rv-dur) var(--rv-ease);
+}
+
+/* Zoom gets extra springiness — cards pop a tiny bit on settle */
+.reveal-zoom {
+  transition:
+    opacity var(--rv-dur) var(--rv-ease),
+    transform var(--rv-dur-long) var(--rv-ease-bounce-lg),
+    filter var(--rv-dur) var(--rv-ease);
+  transition-delay: var(--rv-delay, 0ms);
+}
 
 .reveal-mask {
   opacity: 1;
@@ -4745,11 +4785,11 @@ html[lang="ru"] .font-mono.uppercase {
 .rv-split .rv-word {
   display: inline-block;
   opacity: 0;
-  transform: translate3d(0, 0.28em, 0);
+  transform: translate3d(0, 0.48em, 0);
   filter: blur(14px);
   transition:
     opacity 900ms var(--rv-ease),
-    transform 900ms var(--rv-ease),
+    transform 1050ms var(--rv-ease-bounce-lg),
     filter 900ms var(--rv-ease);
   transition-delay: calc(var(--rv-i, 0) * 58ms + var(--rv-base, 0ms));
   will-change: opacity, transform, filter;
@@ -4765,11 +4805,11 @@ html[lang="ru"] .font-mono.uppercase {
 .rv-chars .rv-char {
   display: inline-block;
   opacity: 0;
-  transform: translate3d(0, 0.5em, 0);
+  transform: translate3d(0, 0.7em, 0);
   filter: blur(8px);
   transition:
     opacity 620ms var(--rv-ease),
-    transform 620ms var(--rv-ease),
+    transform 760ms var(--rv-ease-bounce),
     filter 620ms var(--rv-ease);
   transition-delay: calc(var(--rv-i, 0) * 24ms + var(--rv-base, 0ms));
 }
